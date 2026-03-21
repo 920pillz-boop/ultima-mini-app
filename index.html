@@ -2,704 +2,843 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>ULTIMA Agency</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ULTIMA — OnlyFans Agency</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:'Inter',sans-serif;background:var(--tg-theme-bg-color,#fff);color:var(--tg-theme-text-color,#1a1a2e);line-height:1.6;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--tg-theme-bg-color,#fff);
+  color:var(--tg-theme-text-color,#1a1a1a);
+  line-height:1.6;overflow-x:hidden;
+  padding-bottom:68px;
+  -webkit-font-smoothing:antialiased;
+}
 a{text-decoration:none;color:inherit}
-img{max-width:100%;height:auto}
 :root{
   --blue:#00AAFF;--blue2:#0077DD;--blue3:#0055BB;
   --bg:linear-gradient(135deg,#00AAFF,#0077DD);
   --gray:#F5F7FA;--gray2:#E8EDF3;--gray3:#DDE3EC;
   --text:#1A1A2E;--text2:#4A5568;--text3:#718096;
   --r:14px;--rsm:10px;
-  --sh:0 4px 20px rgba(0,100,200,.08);
+  --sh:0 4px 24px rgba(0,100,200,.08);
   --shl:0 12px 40px rgba(0,100,200,.14);
-  --shb:0 6px 24px rgba(0,150,255,.3)
+  --shb:0 8px 32px rgba(0,150,255,.35)
 }
-.container{max-width:100%;padding:0 16px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#00aaff;border-radius:2px}
+.container{width:100%;padding:0 16px;max-width:480px;margin:0 auto}
 section{padding:48px 0}
 
-/* Animations */
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,170,255,.4)}50%{box-shadow:0 0 0 10px rgba(0,170,255,0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.rv{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+@keyframes gradFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
 .rv.vs{opacity:1;transform:none}
+.rv:nth-child(2){transition-delay:.06s}.rv:nth-child(3){transition-delay:.12s}
+.rv:nth-child(4){transition-delay:.18s}.rv:nth-child(5){transition-delay:.24s}
+.rv:nth-child(6){transition-delay:.3s}
 
-/* Pages */
-.page{display:none}.page.active{display:block}
-
-/* Nav */
-.top-bar{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray2);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1rem;letter-spacing:-.02em}
+/* TOP BAR */
+.top-bar{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--gray2);padding:0 16px;height:52px;display:flex;align-items:center;justify-content:space-between}
+.top-bar.scrolled{box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.top-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1rem;color:var(--text);letter-spacing:-.02em}
 .nav-dot{width:11px;height:11px;border-radius:50%;background:var(--bg);animation:pulse 2.5s infinite}
-.lang-btn{background:var(--gray);border:none;padding:6px 14px;border-radius:20px;font-size:.75rem;font-weight:600;color:var(--text2);cursor:pointer;font-family:inherit}
+.top-right{display:flex;align-items:center;gap:8px}
+.lang-btn{font-size:.75rem;color:var(--text3);font-weight:600;padding:4px 10px;cursor:pointer;background:none;border:1.5px solid var(--gray3);border-radius:50px;white-space:nowrap}
+.lang-btn:active{color:var(--blue);border-color:var(--blue)}
+.nsb{width:30px;height:30px;border-radius:50%;background:var(--gray);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2)}
+.nsb:active{background:var(--blue);color:#fff}
 
-/* Hero */
-.hero{position:relative;min-height:420px;overflow:hidden;background:linear-gradient(135deg,#0a1628 0%,#0d2137 40%,#0a2a4a 100%)}
-.hero-inner{position:relative;z-index:1;padding:40px 16px 36px}
-.hero h1{font-size:1.65rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:16px;letter-spacing:-.03em}
-.highlight{display:inline-block;background:rgba(255,255,255,.08);border:1.5px solid rgba(0,170,255,.5);border-radius:10px;padding:3px 12px;color:var(--blue)}
-.hero-desc{font-size:.85rem;color:rgba(255,255,255,.78);margin-bottom:20px;line-height:1.7}
-.hero-feats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px}
-.hf{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.85);font-size:.72rem;font-weight:500}
-.hf-ico{width:26px;height:26px;background:rgba(0,170,255,.2);border:1px solid rgba(0,170,255,.35);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
-.hero-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--text);padding:13px 24px;border-radius:50px;font-weight:700;font-size:.88rem;border:none;cursor:pointer;letter-spacing:-.01em;box-shadow:0 8px 28px rgba(0,0,0,.2)}
-.tg-ico{width:26px;height:26px;background:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* HERO */
+.hero-wrap{position:relative;overflow:hidden;min-height:80vh}
+.hero-img{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=75&fit=crop') center top/cover no-repeat}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.55) 50%,rgba(0,0,0,.3) 100%)}
+.hero-inner{position:relative;z-index:1;padding:48px 0 40px}
+.hero-inner h1{font-size:1.65rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:16px;letter-spacing:-.03em}
+.highlight{display:inline-block;background:rgba(255,255,255,.1);border:2px solid rgba(0,170,255,.6);border-radius:12px;padding:3px 14px;color:var(--blue);backdrop-filter:blur(4px)}
+.hero-desc{font-size:.86rem;color:rgba(255,255,255,.82);margin-bottom:20px;line-height:1.7}
+.hero-feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.hf{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.88);font-size:.8rem;font-weight:500}
+.hf-ico{width:26px;height:26px;background:rgba(0,170,255,.2);border:1px solid rgba(0,170,255,.4);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.hero-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--text);padding:14px 26px;border-radius:50px;font-weight:700;font-size:.9rem;border:none;cursor:pointer;width:100%;justify-content:center}
+.hero-btn:active{transform:scale(.97)}
+.tg-ico{width:26px;height:26px;background:linear-gradient(135deg,#00AAFF,#0077DD);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
 
-/* Platforms ticker */
-.platforms{padding:14px 0;border-bottom:1px solid var(--gray2);overflow:hidden}
-.plat-track{display:flex;gap:36px;align-items:center;width:max-content;will-change:transform;animation:marquee 18s linear infinite}
-.plat-item{font-weight:800;font-size:.82rem;white-space:nowrap;opacity:.5;flex-shrink:0}
+/* PLATFORMS */
+.platforms{padding:16px 0;border-bottom:1px solid var(--gray2);overflow:hidden}
+.plat-track{display:flex;gap:40px;align-items:center;width:max-content;animation:marquee 18s linear infinite;will-change:transform}
+.plat-item{font-weight:800;font-size:.86rem;white-space:nowrap;opacity:.55;flex-shrink:0}
 .plat-item.of{color:#00ADE8}.plat-item.rd{color:#FF4500}.plat-item.ph{color:#FF9000}.plat-item.yt{color:#FF0000}.plat-item.tt{color:#000}
 
-/* Counter strip */
-.counter-strip{background:var(--blue);padding:24px 16px}
-.counter-inner{display:grid;grid-template-columns:1fr 1fr;gap:0}
+/* COUNTER STRIP */
+.counter-strip{background:var(--blue);padding:28px 0;overflow:hidden}
+.counter-strip-inner{display:grid;grid-template-columns:1fr 1fr;gap:0}
 .counter-item{text-align:center;padding:0 12px}
 .counter-item:first-child{border-right:1px solid rgba(255,255,255,.2)}
-.counter-num{font-size:2rem;font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1}
-.counter-lbl{font-size:.72rem;color:rgba(255,255,255,.75);margin-top:4px;font-weight:500}
+.counter-num{font-size:2rem;font-weight:900;color:#fff;letter-spacing:-.04em;display:block;line-height:1}
+.counter-lbl{font-size:.75rem;color:rgba(255,255,255,.78);margin-top:4px;font-weight:500}
 
-/* Section titles */
-.s-title{font-size:1.45rem;font-weight:800;margin-bottom:8px;letter-spacing:-.03em}
-.s-title .blue{color:var(--blue)}
-.s-sub{color:var(--text2);margin-bottom:24px;font-size:.88rem;line-height:1.7}
-
-/* Calculator */
+/* CALCULATOR */
 .calc-section{background:#fff}
-.calc-box{background:var(--gray);border-radius:16px;padding:20px 16px}
-.calc-field{margin-bottom:16px}
-.calc-field label{display:block;font-size:.72rem;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
-.cinput{width:100%;background:#fff;border:1.5px solid var(--gray3);border-radius:var(--rsm);padding:12px 14px;font-size:1rem;font-family:inherit;color:var(--text);outline:none}
+.calc-title{font-size:1.35rem;font-weight:800;margin-bottom:6px;letter-spacing:-.03em}
+.calc-title span{color:var(--blue)}
+.calc-sub{color:var(--text2);margin-bottom:28px;font-size:.86rem}
+.calc-box{background:var(--gray);border-radius:16px;padding:20px;position:relative;overflow:hidden}
+.calc-grid{display:flex;flex-direction:column;gap:18px;margin-bottom:20px}
+.calc-field label{display:block;font-size:.7rem;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.cinput{width:100%;background:#fff;border:1.5px solid var(--gray3);border-radius:var(--rsm);padding:12px 14px;font-size:.92rem;font-family:'Inter',sans-serif;color:var(--text);outline:none}
 .cinput:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,170,255,.1)}
 .cinput-lbl{font-size:.7rem;color:var(--text3);margin-bottom:4px}
 .slider-row{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text3);margin-bottom:6px}
-.cslider{-webkit-appearance:none;width:100%;height:5px;background:var(--gray3);border-radius:3px;outline:none}
-.cslider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--blue);border:2px solid #fff;box-shadow:0 2px 8px rgba(0,150,255,.4)}
+.cslider{-webkit-appearance:none;appearance:none;width:100%;height:5px;background:var(--gray3);border-radius:3px;outline:none}
+.cslider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--blue);cursor:pointer;border:2px solid #fff;box-shadow:0 2px 10px rgba(0,150,255,.4)}
 .slval{font-size:.78rem;color:var(--blue);margin-top:5px;font-weight:700}
 .eng-btns{display:flex;gap:4px}
-.eng-btn{flex:1;padding:8px 0;background:#fff;border:1.5px solid var(--gray3);border-radius:7px;font-size:.76rem;font-weight:600;color:var(--text3);cursor:pointer;text-align:center;font-family:inherit}
-.eng-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
-.calc-result{background:#fff;border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:var(--sh);margin-top:16px}
-.calc-result-label{font-size:.85rem;color:var(--text2);font-weight:500}
-.calc-result-amount{background:var(--bg);color:#fff;border-radius:50px;padding:10px 28px;font-size:1.5rem;font-weight:900;letter-spacing:-.04em;box-shadow:var(--shb)}
+.eng-btn{flex:1;padding:8px 0;background:#fff;border:1.5px solid var(--gray3);border-radius:7px;font-size:.74rem;font-weight:600;color:var(--text3);cursor:pointer;text-align:center;font-family:'Inter',sans-serif}
+.eng-btn.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(0,150,255,.3)}
+.calc-result-row{background:#fff;border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:var(--sh)}
+.calc-result-label{font-size:.84rem;color:var(--text2);font-weight:500;text-align:center}
+.calc-result-amount{background:var(--bg);color:#fff;border-radius:50px;padding:12px 36px;font-size:1.65rem;font-weight:900;letter-spacing:-.04em;box-shadow:var(--shb);text-align:center}
 .calc-note{font-size:.7rem;color:var(--text3);margin-top:10px;font-style:italic;text-align:center}
 
-/* Problems */
+/* PROBLEMS */
 .prob-section{background:var(--gray)}
-.prob-item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:10px;padding:12px 14px;margin-bottom:8px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
-.prob-ico{width:30px;height:30px;background:rgba(0,170,255,.1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85rem;flex-shrink:0;color:var(--blue)}
+.prob-left h2{font-size:1.3rem;font-weight:800;margin-bottom:12px;letter-spacing:-.03em}
+.prob-left h2 span{color:var(--blue)}
+.prob-left p{color:var(--text2);margin-bottom:24px;line-height:1.7;font-size:.86rem}
+.prob-list{display:flex;flex-direction:column;gap:10px}
+.prob-item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:10px;padding:12px 14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.prob-ico{width:30px;height:30px;background:linear-gradient(135deg,rgba(0,170,255,.1),rgba(0,100,220,.1));border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.85rem;flex-shrink:0;color:var(--blue)}
 .prob-text{font-size:.84rem;color:var(--text2);font-weight:500}
+.prob-img{border-radius:16px;overflow:hidden;margin-top:24px;box-shadow:var(--sh)}
+.prob-img img{width:100%;height:200px;object-fit:cover;display:block}
 
-/* Services */
+/* SERVICES */
 .srv-section{background:#fff}
+.srv-intro h2{font-size:1.3rem;font-weight:800;letter-spacing:-.03em;margin-bottom:10px}
+.srv-intro h2 span{color:var(--blue)}
+.srv-intro p{color:var(--text2);line-height:1.7;font-size:.86rem;margin-bottom:24px}
 .srv-grid{display:flex;flex-direction:column;gap:12px}
-.srv-card{background:var(--gray);border-radius:var(--r);padding:20px 16px}
+.srv-card{background:var(--gray);border-radius:var(--r);padding:20px 18px;position:relative;overflow:hidden}
 .srv-ico{width:40px;height:40px;background:rgba(0,170,255,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:12px}
-.srv-card h3{font-size:.92rem;font-weight:700;margin-bottom:6px}
+.srv-card h3{font-size:.9rem;font-weight:700;margin-bottom:7px}
 .srv-card p{font-size:.82rem;color:var(--text2);line-height:1.6}
-.srv-cta{background:var(--bg);color:#fff}
-.srv-cta .srv-ico{background:rgba(255,255,255,.2);color:#fff}
-.srv-cta h3,.srv-cta p{color:#fff}
-.srv-cta p{color:rgba(255,255,255,.8)}
+.srv-cta-card{background:var(--bg);color:#fff;box-shadow:var(--shb)}
+.srv-cta-card .srv-ico{background:rgba(255,255,255,.2);color:#fff}
+.srv-cta-card h3{color:#fff}.srv-cta-card p{color:rgba(255,255,255,.82)}
 
-/* Process */
+/* PROCESS */
 .proc-section{background:var(--gray)}
-.proc-step{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray3)}
-.proc-step:last-child{border:none}
-.proc-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0;background:var(--gray3);color:var(--text3)}
-.proc-num.active{background:var(--bg);color:#fff;box-shadow:0 3px 10px rgba(0,150,255,.3)}
-.proc-step-text{font-size:.85rem;color:var(--text2);line-height:1.5;padding-top:5px}
+.proc-left h2{font-size:1.3rem;font-weight:800;margin-bottom:12px;letter-spacing:-.03em}
+.proc-left h2 .blue{color:var(--blue)}
+.proc-left>p{color:var(--text2);line-height:1.7;margin-bottom:24px;font-size:.86rem}
+.proc-steps{display:flex;flex-direction:column;gap:0}
+.proc-step{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--gray3);cursor:pointer}
+.proc-step:last-child{border-bottom:none}
+.proc-num{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0;margin-top:1px}
+.proc-num.active{background:var(--bg);color:#fff;box-shadow:0 4px 12px rgba(0,150,255,.35)}
+.proc-num.inactive{background:var(--gray3);color:var(--text3)}
+.proc-step-text{font-size:.84rem;color:var(--text2);line-height:1.5;padding-top:5px}
+.proc-step.active-step .proc-step-text{color:var(--text);font-weight:600}
+.proc-phone{position:relative;width:200px;margin:24px auto 0}
+.proc-phone-img{border-radius:24px;overflow:hidden;box-shadow:0 24px 60px rgba(0,100,255,.2);position:relative;z-index:1}
+.proc-phone-img img{width:100%;height:360px;object-fit:cover;display:block}
+.proc-phone-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:240px;height:240px;background:radial-gradient(circle,rgba(0,170,255,.15) 0%,transparent 70%);z-index:0;animation:float 5s ease-in-out infinite}
 
-/* Comparison */
+/* COMPARISON */
 .cmp-section{background:#fff}
+.cmp-section h2{font-size:1.3rem;font-weight:800;margin-bottom:8px;letter-spacing:-.03em}
+.cmp-section h2 .blue{color:var(--blue)}
+.cmp-sub{color:var(--text2);margin-bottom:24px;font-size:.86rem}
 .cmp-table{border:1.5px solid var(--gray2);border-radius:16px;overflow:hidden;box-shadow:var(--sh)}
 .cmp-head{display:grid;grid-template-columns:1fr 1fr;background:var(--bg)}
-.cmp-hc{padding:12px 14px;font-weight:700;font-size:.85rem;color:#fff;text-align:center}
+.cmp-hc{padding:12px 14px;font-weight:700;font-size:.84rem;color:#fff;text-align:center}
 .cmp-hc:last-child{background:rgba(255,255,255,.12)}
 .cmp-row{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--gray2)}
-.cmp-cell{padding:12px 14px;font-size:.78rem;line-height:1.5;display:flex;align-items:flex-start;gap:8px}
+.cmp-cell{padding:10px 12px;display:flex;align-items:flex-start;gap:7px;font-size:.76rem;line-height:1.5}
 .cmp-cell:last-child{border-left:1px solid var(--gray2);color:var(--text3)}
-.ok{color:#16C784;font-weight:900;flex-shrink:0}.nx{color:#FF4444;font-weight:900;flex-shrink:0}
+.ok{color:#16C784;font-size:.95rem;flex-shrink:0;margin-top:1px;font-weight:900}
+.nx{color:#FF4444;font-size:.95rem;flex-shrink:0;margin-top:1px;font-weight:900}
+.cmp-footer{padding:16px 14px;background:var(--gray);display:flex;flex-direction:column;gap:14px}
+.cmp-footer-text{font-size:.8rem;color:var(--text2);line-height:1.6}
+.cmp-footer-text ul{margin-top:8px;padding-left:16px;display:flex;flex-direction:column;gap:4px}
+.cmp-footer-text li{color:var(--blue);font-weight:500;font-size:.8rem}
 
-/* Results */
+/* RESULTS */
 .res-section{background:var(--gray)}
-.res-item{display:flex;align-items:flex-start;gap:8px;font-size:.85rem;color:var(--text2);line-height:1.5;margin-bottom:8px}
+.res-left h2{font-size:1.3rem;font-weight:800;margin-bottom:12px;letter-spacing:-.03em}
+.res-left h2 .blue{color:var(--blue)}
+.res-left>p{color:var(--text2);margin-bottom:16px;line-height:1.7;font-size:.86rem}
+.res-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.res-item{display:flex;align-items:flex-start;gap:8px;font-size:.84rem;color:var(--text2);line-height:1.5}
 .res-dot{color:var(--blue);font-size:1.1rem;flex-shrink:0;margin-top:-2px}
+.res-img{border-radius:16px;overflow:hidden;box-shadow:var(--sh);margin-top:20px}
+.res-img img{width:100%;height:180px;object-fit:cover;display:block}
 
-/* Plan */
+/* PLAN */
 .plan-section{background:#fff}
-.plan-card{border-radius:16px;overflow:hidden;background:var(--gray);box-shadow:var(--sh)}
-.plan-left{padding:24px 16px}
-.plan-left h3{font-size:1.1rem;font-weight:800;margin-bottom:12px;line-height:1.3}
+.plan-section h2{font-size:1.3rem;font-weight:800;margin-bottom:24px;letter-spacing:-.03em}
+.plan-section h2 .blue{color:var(--blue)}
+.plan-card{border-radius:18px;overflow:hidden;background:var(--gray);box-shadow:var(--sh)}
+.plan-left{padding:22px 18px}
+.plan-left h3{font-size:1.05rem;font-weight:800;margin-bottom:12px;line-height:1.3;letter-spacing:-.02em}
 .plan-left h3 .blue{color:var(--blue)}
-.plan-left p{color:var(--text2);line-height:1.7;margin-bottom:12px;font-size:.88rem}
-.plan-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
-.plan-list li{display:flex;align-items:center;gap:8px;font-size:.84rem;color:var(--text2)}
-.plan-dot{color:var(--blue);font-size:1.1rem;flex-shrink:0}
-.plan-img{height:200px;overflow:hidden}
-.plan-img img{width:100%;height:100%;object-fit:cover}
+.plan-left p{color:var(--text2);line-height:1.7;margin-bottom:12px;font-size:.84rem}
+.plan-list{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
+.plan-list li{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--text2)}
+.plan-dot{color:var(--blue);font-size:1.1rem;flex-shrink:0;margin-top:-2px}
+.plan-img img{width:100%;height:180px;object-fit:cover;display:block}
 
 /* FAQ */
 .faq-section{background:var(--gray)}
+.faq-section h2{font-size:1.3rem;font-weight:800;margin-bottom:8px;letter-spacing:-.03em}
+.faq-section h2 .blue{color:var(--blue)}
+.faq-sub{color:var(--text2);margin-bottom:24px;line-height:1.6;font-size:.84rem}
 .faq-list{display:flex;flex-direction:column;gap:8px}
 .faq-item{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.fq{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:12px}
-.fq span{font-size:.88rem;font-weight:700;color:var(--blue);line-height:1.3}
-.ftog{width:28px;height:28px;border-radius:50%;background:var(--bg);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;font-weight:800;transition:transform .3s}
+.faq-item.open{box-shadow:0 4px 18px rgba(0,100,255,.08)}
+.fq{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:12px;user-select:none}
+.fq span{font-size:.86rem;font-weight:700;color:var(--blue);line-height:1.35}
+.ftog{width:28px;height:28px;border-radius:50%;background:var(--bg);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;font-weight:800;transition:transform .35s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 12px rgba(0,150,255,.3)}
 .faq-item.open .ftog{transform:rotate(180deg)}
-.fa{max-height:0;overflow:hidden;transition:max-height .4s ease}
-.faq-item.open .fa{max-height:500px}
-.fai{padding:0 16px 14px;border-top:1px solid var(--gray2);padding-top:12px;font-size:.82rem;color:var(--text2);line-height:1.75}
+.fa{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1)}
+.faq-item.open .fa{max-height:600px}
+.fai{padding:0 16px 14px;border-top:1px solid var(--gray2);padding-top:12px;font-size:.8rem;color:var(--text2);line-height:1.7}
 
-/* Social */
+/* SOCIAL */
 .soc-section{background:#fff}
+.soc-section h2{font-size:1.25rem;font-weight:800;margin-bottom:4px;letter-spacing:-.03em}
+.soc-section h2 .blue{color:var(--blue)}
+.soc-sub{color:var(--text2);margin-bottom:20px;font-size:.84rem}
 .soc-grid{display:flex;flex-direction:column;gap:12px}
-.soc-card{background:var(--gray);border-radius:var(--r);overflow:hidden}
-.soc-thumb{height:160px;overflow:hidden}
-.soc-thumb img{width:100%;height:100%;object-fit:cover}
-.soc-handle{padding:12px 14px;display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:700}
-.sico{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.sico.tt{background:#000}.sico.ig{background:linear-gradient(45deg,#f09433,#dc2743)}.sico.tg{background:#2AABEE}
+.soc-card{background:var(--gray);border-radius:var(--r);overflow:hidden;display:flex;align-items:center}
+.soc-thumb{width:90px;height:72px;overflow:hidden;flex-shrink:0}
+.soc-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.soc-handle{padding:12px 14px;display:flex;align-items:center;gap:9px;font-size:.82rem;font-weight:700}
+.sico-tt{background:#000;color:#fff;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sico-ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sico-tg{background:#2AABEE;color:#fff;width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
-/* CTA */
-.cta-block{border-radius:20px;overflow:hidden;background:var(--bg);position:relative;box-shadow:0 16px 50px rgba(0,100,255,.2)}
-.cta-inner{padding:36px 20px;color:#fff}
-.cta-inner h2{font-size:1.3rem;font-weight:900;margin-bottom:16px;line-height:1.25}
-.cta-inner p{opacity:.88;margin-bottom:14px;font-size:.88rem;line-height:1.7}
-.cta-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px}
+/* CTA BLOCK */
+.cta-block{border-radius:20px;overflow:hidden;box-shadow:0 16px 60px rgba(0,100,255,.2);background:var(--bg);position:relative}
+.cta-block::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.05) 0%,transparent 60%);pointer-events:none}
+.cta-left{padding:28px 18px;color:#fff;position:relative}
+.cta-left h2{font-size:1.25rem;font-weight:900;margin-bottom:14px;line-height:1.2;letter-spacing:-.03em}
+.cta-left>p{opacity:.88;margin-bottom:14px;font-size:.86rem;line-height:1.6}
+.cta-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
 .cta-item{display:flex;align-items:center;gap:6px;font-size:.78rem;opacity:.9}
-.cta-note{font-size:.88rem;font-weight:700;margin-bottom:20px}
-.cta-guarantees{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
-.cta-g{background:rgba(255,255,255,.12);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:8px;font-size:.76rem;font-weight:600;backdrop-filter:blur(4px)}
-.cta-g-ico{font-size:1.1rem;flex-shrink:0}
-.cta-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--blue);padding:14px 28px;border-radius:50px;font-weight:800;font-size:.9rem;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.cta-note{font-size:.86rem;font-weight:700;margin-bottom:18px}
+.cta-guarantees{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+.cta-g{background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;font-size:.76rem;font-weight:600;backdrop-filter:blur(4px)}
+.cta-g-ico{font-size:1rem;flex-shrink:0}
+.cta-right{overflow:hidden;height:180px}
+.cta-right img{width:100%;height:100%;object-fit:cover;display:block}
 
-/* Vacancies */
+/* VACANCIES */
 .vac-section{background:var(--gray)}
-.vac-list{display:flex;flex-direction:column;gap:10px}
-.vac-card{background:#fff;border-radius:var(--r);padding:18px 16px;box-shadow:0 2px 6px rgba(0,0,0,.04);border-left:3px solid transparent;cursor:pointer}
-.vac-card:active{border-left-color:var(--blue);background:var(--gray)}
-.vac-card h3{font-size:.95rem;font-weight:700;margin-bottom:5px}
-.vac-card p{font-size:.8rem;color:var(--text2);line-height:1.5;margin-bottom:10px}
-.vac-link{color:var(--blue);font-size:.82rem;font-weight:700;display:inline-flex;align-items:center;gap:4px}
+.vac-section h2{font-size:1.25rem;font-weight:800;margin-bottom:4px;letter-spacing:-.03em}
+.vac-section h2 .blue{color:var(--blue)}
+.vac-sub{color:var(--text2);margin-bottom:24px;font-size:.84rem}
+.vac-list{display:flex;flex-direction:column;gap:12px}
+.vac-card{background:#fff;border-radius:var(--r);padding:18px 16px;box-shadow:0 2px 8px rgba(0,0,0,.04);border-left:3px solid transparent;transition:border-color .3s}
+.vac-card h3{font-size:.92rem;font-weight:700;margin-bottom:6px}
+.vac-card>p{font-size:.8rem;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.vac-link{color:var(--blue);font-size:.8rem;font-weight:700;display:inline-flex;align-items:center;gap:5px;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;padding:0}
+.vac-expand{display:none;padding-top:14px;border-top:1px solid var(--gray2);margin-top:14px}
+.vac-expand.open{display:block}
+.vac-detail{margin-bottom:12px}
+.vac-detail h4{font-size:.8rem;font-weight:700;color:var(--blue);margin-bottom:6px}
+.vac-detail ul{list-style:none;display:flex;flex-direction:column;gap:4px}
+.vac-detail li{font-size:.78rem;color:var(--text2);line-height:1.55;display:flex;align-items:flex-start;gap:6px}
+.vac-detail li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:7px}
+.vac-salary-badge{display:inline-block;background:rgba(0,170,255,.1);color:var(--blue);border-radius:8px;padding:3px 10px;font-size:.73rem;font-weight:700;margin-bottom:8px}
+.vac-tags-mini{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.vac-tag-mini{background:var(--gray);border-radius:6px;padding:3px 9px;font-size:.7rem;color:var(--text2);font-weight:500}
 
-/* Footer */
-.footer{padding:36px 16px 20px;border-top:1px solid var(--gray2);text-align:center}
-.f-logo{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;font-size:1rem;margin-bottom:10px}
-.f-desc{font-size:.78rem;color:var(--text3);line-height:1.7;margin-bottom:16px;max-width:400px;margin-left:auto;margin-right:auto}
-.f-soc{display:flex;gap:8px;justify-content:center;margin-bottom:16px}
-.f-soc-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.f-soc-btn.tt{background:#000}.f-soc-btn.tg{background:#2AABEE}.f-soc-btn.ig{background:linear-gradient(45deg,#f09433,#dc2743)}
-.f-copy{font-size:.72rem;color:var(--text3)}
+/* BUTTONS */
+.btn-blue{background:var(--bg);color:#fff;border:none;padding:13px 28px;border-radius:50px;font-size:.86rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;letter-spacing:-.01em;width:100%;justify-content:center;font-family:'Inter',sans-serif}
+.btn-blue:active{transform:scale(.97)}
+.btn-outline{background:transparent;border:2px solid var(--blue);color:var(--blue);padding:12px 26px;border-radius:50px;font-size:.86rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;width:100%;justify-content:center}
+.btn-outline:active{background:var(--blue);color:#fff}
+.cta-btn{display:flex;align-items:center;gap:10px;background:#fff;color:var(--blue);padding:14px 28px;border-radius:50px;font-weight:800;font-size:.9rem;border:none;cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.15);width:100%;justify-content:center;font-family:'Inter',sans-serif}
+.cta-btn:active{transform:scale(.97)}
 
-/* Buttons */
-.btn-blue{background:var(--bg);color:#fff;border:none;padding:13px 28px;border-radius:50px;font-size:.88rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:inherit;box-shadow:var(--shb)}
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(255,255,255,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--gray2);height:60px;display:flex;align-items:center;justify-content:space-around;padding:0 4px;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bnav-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.62rem;font-weight:600;color:var(--text3);cursor:pointer;padding:5px 8px;border-radius:10px;background:none;border:none;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent}
+.bnav-item.active{color:var(--blue)}
+.bnav-item svg{width:20px;height:20px}
+.bnav-item:active{background:rgba(0,170,255,.06)}
 
-/* Vacancy pages */
-.vac-hero{background:linear-gradient(135deg,#0a1628,#0d2137);padding:32px 16px;color:#fff}
-.vac-back{display:flex;align-items:center;gap:6px;font-size:.82rem;color:rgba(255,255,255,.7);margin-bottom:16px;cursor:pointer;font-weight:500}
-.vac-badge{display:inline-block;background:rgba(0,170,255,.15);border:1px solid rgba(0,170,255,.3);border-radius:20px;padding:4px 12px;font-size:.7rem;color:var(--blue);font-weight:600;margin-bottom:12px}
-.vac-hero h1{font-size:1.5rem;font-weight:900;margin-bottom:10px}
-.vac-salary{background:rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;backdrop-filter:blur(8px);margin-bottom:14px;display:inline-block}
-.vac-salary-num{font-size:1.3rem;font-weight:900;color:#fff}
-.vac-salary-lbl{font-size:.7rem;color:rgba(255,255,255,.65)}
-.vac-tags{display:flex;flex-wrap:wrap;gap:6px}
-.vac-tag{background:rgba(255,255,255,.1);border-radius:20px;padding:6px 12px;font-size:.72rem;font-weight:600;color:rgba(255,255,255,.8)}
-.vac-content{padding:24px 16px}
-.vac-block{background:var(--gray);border-radius:14px;padding:18px 16px;margin-bottom:12px}
-.vac-block h3{font-size:.92rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.vac-block-ico{width:28px;height:28px;background:rgba(0,170,255,.1);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
-.vac-block li{font-size:.84rem;color:var(--text2);line-height:1.6;margin-bottom:4px;padding-left:14px;position:relative}
-.vac-block li::before{content:'•';color:var(--blue);position:absolute;left:0;font-weight:900}
-.vac-block ul{list-style:none}
-.vac-cta{text-align:center;padding:24px 16px 36px}
-.vac-cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--bg);color:#fff;padding:14px 32px;border-radius:50px;font-weight:700;font-size:.9rem;border:none;cursor:pointer;font-family:inherit;box-shadow:var(--shb)}
-
-/* SVG icons */
-svg{display:block}
+/* FOOTER */
+.mini-footer{padding:28px 0 76px;text-align:center}
+.mini-footer .flogo{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:900;font-size:1rem;margin-bottom:10px}
+.mini-footer .flogo-desc{font-size:.76rem;color:var(--text3);line-height:1.6;margin-bottom:14px}
+.fsoc-row{display:flex;gap:9px;justify-content:center}
+.fsoc-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none}
+.fsoc-btn.tt{background:#000;color:#fff}
+.fsoc-btn.tg{background:#2AABEE;color:#fff}
+.fsoc-btn.ig{background:linear-gradient(45deg,#f09433,#dc2743);color:#fff}
+.fbottom{margin-top:14px;font-size:.7rem;color:var(--text3)}
 </style>
 </head>
 <body>
 
-<!-- ═══ TOP BAR ═══ -->
-<div class="top-bar">
-  <div class="nav-logo"><div class="nav-dot"></div>ULTIMA</div>
-  <button class="lang-btn" onclick="toggleLang()" id="langToggle">English</button>
+<!-- TOP BAR -->
+<div class="top-bar" id="topBar">
+  <div class="top-logo"><div class="nav-dot"></div>ULTIMA</div>
+  <div class="top-right">
+    <button class="lang-btn" id="langToggle" onclick="toggleLang()">English</button>
+    <button class="nsb"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.78 1.53V6.84a4.84 4.84 0 0 1-1.02-.15z"/></svg></button>
+    <button class="nsb"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></button>
+    <button class="nsb"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></button>
+  </div>
 </div>
-
-<!-- ═══════════════ MAIN PAGE ═══════════════ -->
-<div class="page active" id="page-main">
 
 <!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <h1 data-ru="Превратите свою популярность в стабильный доход с ведущим <span class='highlight'>OnlyFans-агентством</span>" data-en="Turn your popularity into stable income with the leading <span class='highlight'>OnlyFans Agency</span>" style="animation:fadeUp .7s ease both">Превратите свою популярность в стабильный доход с ведущим <span class="highlight">OnlyFans-агентством</span></h1>
-    <p class="hero-desc" data-ru="ULTIMA — профессиональное агентство полного цикла для контент-креаторов OnlyFans. Мы берём на себя все аспекты управления и продвижения твоего аккаунта." data-en="ULTIMA — a full-cycle professional agency for OnlyFans content creators. We handle all aspects of managing and promoting your account." style="animation:fadeUp .7s .1s ease both">ULTIMA — профессиональное агентство полного цикла для контент-креаторов OnlyFans. Мы берём на себя все аспекты управления и продвижения твоего аккаунта.</p>
-    <div class="hero-feats" style="animation:fadeUp .7s .18s ease both">
-      <div class="hf"><div class="hf-ico">🏆</div><span data-ru="В топ" data-en="Top">В топ</span></div>
-      <div class="hf"><div class="hf-ico">⟳</div><span data-ru="24/7" data-en="24/7">24/7</span></div>
-      <div class="hf"><div class="hf-ico">$</div><span data-ru="Без предоплат" data-en="No prepayments">Без предоплат</span></div>
-    </div>
-    <div style="animation:fadeUp .7s .26s ease both">
-      <button class="hero-btn" onclick="doApply()">
-        <div class="tg-ico"><svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
-        <span data-ru="Начать зарабатывать" data-en="Start earning">Начать зарабатывать</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- PLATFORMS -->
-<div class="platforms">
-  <div style="overflow:hidden">
-    <div class="plat-track">
-      <span class="plat-item of">OnlyFans</span><span class="plat-item rd">Reddit</span><span class="plat-item ph">PornHub</span><span class="plat-item yt">YouTube</span><span class="plat-item tt">TikTok</span><span class="plat-item of">Instagram</span><span class="plat-item rd">Telegram</span>
-      <span class="plat-item of">OnlyFans</span><span class="plat-item rd">Reddit</span><span class="plat-item ph">PornHub</span><span class="plat-item yt">YouTube</span><span class="plat-item tt">TikTok</span><span class="plat-item of">Instagram</span><span class="plat-item rd">Telegram</span>
-    </div>
-  </div>
-</div>
-
-<!-- COUNTERS -->
-<div class="counter-strip">
-  <div class="counter-inner">
-    <div class="counter-item"><span class="counter-num" id="modelCounter">0</span><div class="counter-lbl" data-ru="Успешных моделей" data-en="Successful models">Успешных моделей</div></div>
-    <div class="counter-item"><span class="counter-num" id="payoutCounter">0%</span><div class="counter-lbl" data-ru="Выплата модели" data-en="Model payout">Выплата модели</div></div>
-  </div>
-</div>
-
-<!-- CALCULATOR -->
-<section class="calc-section">
+<div class="hero-wrap" id="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
   <div class="container">
-    <h2 class="s-title rv"><span data-ru="Калькулятор " data-en="Calculator ">Калькулятор </span><span class="blue" data-ru="дохода" data-en="of income">дохода</span></h2>
-    <p class="s-sub rv" data-ru="Рассчитай, сколько будешь зарабатывать с ULTIMA" data-en="Calculate how much you'll earn with ULTIMA">Рассчитай, сколько будешь зарабатывать с ULTIMA</p>
-    <div class="calc-box rv">
-      <div class="calc-field">
-        <label data-ru="Текущий доход с Fansly ($)" data-en="Current Fansly income ($)">Текущий доход с Fansly ($)</label>
-        <input type="number" class="cinput" id="c-income" value="500" min="0">
+    <div class="hero-inner">
+      <h1 style="animation:fadeUp .9s ease both" data-ru="Превратите свою популярность в стабильный доход с ведущим <span class='highlight'>OnlyFans-агентством</span>" data-en="Turn your popularity into stable income with the leading <span class='highlight'>OnlyFans Agency</span>">Превратите свою популярность в стабильный доход с ведущим <span class="highlight">OnlyFans-агентством</span></h1>
+      <p class="hero-desc" style="animation:fadeUp .9s .12s ease both" data-ru="ULTIMA — профессиональное агентство полного цикла для контент-креаторов OnlyFans. Мы берём на себя все аспекты управления и продвижения твоего аккаунта." data-en="ULTIMA — a full-cycle professional agency for OnlyFans content creators. We handle all aspects of managing and promoting your account.">ULTIMA — профессиональное агентство полного цикла для контент-креаторов OnlyFans. Мы берём на себя все аспекты управления и продвижения твоего аккаунта.</p>
+      <div class="hero-feats" style="animation:fadeUp .9s .22s ease both">
+        <div class="hf"><div class="hf-ico">&#127942;</div><span data-ru="Вхождение в топ" data-en="Top ranking">Вхождение в топ</span></div>
+        <div class="hf"><div class="hf-ico">&#8635;</div><span data-ru="Поддержка 24/7" data-en="24/7 Support">Поддержка 24/7</span></div>
+        <div class="hf"><div class="hf-ico">$</div><span data-ru="Без предоплат" data-en="No prepayments">Без предоплат</span></div>
       </div>
-      <div class="calc-field">
-        <label data-ru="Месяцев сотрудничества" data-en="Months of cooperation">Месяцев сотрудничества</label>
-        <div class="slider-row"><span>2</span><span>24</span></div>
-        <input type="range" class="cslider" id="c-months" min="2" max="24" value="10">
-        <div class="slval" id="c-months-val">10</div>
-      </div>
-      <div class="calc-field">
-        <label data-ru="Уровень английского" data-en="English level">Уровень английского</label>
-        <div class="eng-btns">
-          <button class="eng-btn active" data-eng="1">A1</button>
-          <button class="eng-btn" data-eng="1.25">A2</button>
-          <button class="eng-btn" data-eng="1.55">B1</button>
-          <button class="eng-btn" data-eng="1.85">B2</button>
-          <button class="eng-btn" data-eng="2.3">C1</button>
-        </div>
-      </div>
-      <div class="calc-field">
-        <label data-ru="Контента в неделю (фото)" data-en="Content per week (photos)">Контента в неделю (фото)</label>
-        <div class="slider-row"><span>10</span><span>250</span></div>
-        <input type="range" class="cslider" id="c-content" min="10" max="250" value="80">
-        <div class="slval" id="c-content-val">80</div>
-      </div>
-      <div class="calc-result">
-        <div class="calc-result-label" data-ru="Доход через 6 мес." data-en="Income in 6 months">Доход через 6 мес.</div>
-        <div class="calc-result-amount" id="c-result">3 925 $</div>
-      </div>
-      <p class="calc-note" data-ru="* Расчёт ориентировочный" data-en="* Estimate only">* Расчёт ориентировочный</p>
-    </div>
-  </div>
-</section>
-
-<!-- PROBLEMS -->
-<section class="prob-section">
-  <div class="container">
-    <h2 class="s-title rv" data-ru="Типичные проблемы <span class='blue'>моделей</span>" data-en="Typical problems <span class='blue'>of models</span>">Типичные проблемы <span class="blue">моделей</span></h2>
-    <p class="s-sub rv" data-ru="Большинство авторов контента сталкиваются с одними и теми же трудностями" data-en="Most content creators face the same challenges">Большинство авторов контента сталкиваются с одними и теми же трудностями</p>
-    <div class="prob-item rv"><div class="prob-ico">✕</div><div class="prob-text" data-ru="Непонятно, с чего начать" data-en="Don't know where to start">Непонятно, с чего начать</div></div>
-    <div class="prob-item rv"><div class="prob-ico">✕</div><div class="prob-text" data-ru="Нет стабильного потока подписчиков" data-en="No stable subscriber flow">Нет стабильного потока подписчиков</div></div>
-    <div class="prob-item rv"><div class="prob-ico">✕</div><div class="prob-text" data-ru="Низкие доходы от PPV" data-en="Low PPV income">Низкие доходы от PPV</div></div>
-    <div class="prob-item rv"><div class="prob-ico">✕</div><div class="prob-text" data-ru="Нет времени на чаттинг" data-en="No time for chatting">Нет времени на чаттинг</div></div>
-    <div class="prob-item rv"><div class="prob-ico">✕</div><div class="prob-text" data-ru="Неэффективное продвижение" data-en="Ineffective promotion">Неэффективное продвижение</div></div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="srv-section">
-  <div class="container">
-    <h2 class="s-title rv" data-ru="Что мы <span class='blue'>предлагаем?</span>" data-en="What we <span class='blue'>offer?</span>">Что мы <span class="blue">предлагаем?</span></h2>
-    <div class="srv-grid">
-      <div class="srv-card rv"><div class="srv-ico">🌐</div><h3 data-ru="Полное сопровождение" data-en="Full support">Полное сопровождение</h3><p data-ru="Работаем с моделями из любой страны. За каждой — свой менеджер, чаттеры, ассистент и траффер." data-en="We work with models from any country. Each gets a personal manager, chatters, assistant and traffer.">Работаем с моделями из любой страны. За каждой — свой менеджер, чаттеры, ассистент и траффер.</p></div>
-      <div class="srv-card rv"><div class="srv-ico">📣</div><h3 data-ru="Маркетинг" data-en="Marketing">Маркетинг</h3><p data-ru="Instagram, TikTok, Reddit, YouTube, PornHub — закупка рекламы, кросс-продвижение, SEO-стратегии." data-en="Instagram, TikTok, Reddit, YouTube, PornHub — ad buying, cross-promotion, SEO strategies.">Instagram, TikTok, Reddit, YouTube, PornHub — закупка рекламы, кросс-продвижение, SEO-стратегии.</p></div>
-      <div class="srv-card rv"><div class="srv-ico">🎬</div><h3 data-ru="Производство контента" data-en="Content production">Производство контента</h3><p data-ru="Фото, видео, обработка, сценарии, монтаж. Постинг по расписанию." data-en="Photo, video, editing, scripts, montage. Scheduled posting.">Фото, видео, обработка, сценарии, монтаж. Постинг по расписанию.</p></div>
-      <div class="srv-card rv"><div class="srv-ico">💬</div><h3 data-ru="24/7 чаттинг" data-en="24/7 chatting">24/7 чаттинг</h3><p data-ru="Команда экспертов для вовлечения и монетизации фанатов" data-en="Expert team for engaging and monetizing fans">Команда экспертов для вовлечения и монетизации фанатов</p></div>
-      <div class="srv-card rv"><div class="srv-ico">💻</div><h3 data-ru="Управление аккаунтом" data-en="Account management">Управление аккаунтом</h3><p data-ru="Планирование публикаций, оформление и редактирование контента" data-en="Publication planning, content design and editing">Планирование публикаций, оформление и редактирование контента</p></div>
-      <div class="srv-card srv-cta rv" onclick="doApply()"><div class="srv-ico">✨</div><h3 data-ru="Выбрать подходящий пакет" data-en="Choose a package">Выбрать подходящий пакет</h3><p data-ru="Подберём решение под ваши цели" data-en="We'll find a solution for your goals">Подберём решение под ваши цели</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- PROCESS -->
-<section class="proc-section">
-  <div class="container">
-    <h2 class="s-title rv" data-ru="Прозрачный процесс <span class='blue'>до ТОП-доходов</span>" data-en="Transparent process <span class='blue'>to TOP income</span>">Прозрачный процесс <span class="blue">до ТОП-доходов</span></h2>
-    <div class="proc-step rv"><div class="proc-num active">1</div><div class="proc-step-text" data-ru="Разработка персонального бренда, определение ниши" data-en="Personal brand development, niche identification">Разработка персонального бренда, определение ниши</div></div>
-    <div class="proc-step rv"><div class="proc-num">2</div><div class="proc-step-text" data-ru="Построение стратегии продвижения" data-en="Building a promotion strategy">Построение стратегии продвижения</div></div>
-    <div class="proc-step rv"><div class="proc-num">3</div><div class="proc-step-text" data-ru="Подбор команды специалистов" data-en="Assembling a team of specialists">Подбор команды специалистов</div></div>
-    <div class="proc-step rv"><div class="proc-num">4</div><div class="proc-step-text" data-ru="Обучение созданию контента" data-en="Content creation training">Обучение созданию контента</div></div>
-    <div class="proc-step rv"><div class="proc-num">5</div><div class="proc-step-text" data-ru="Активное ведение аккаунта — постинг, чаттинг, трафик" data-en="Active account management — posting, chatting, traffic">Активное ведение аккаунта — постинг, чаттинг, трафик</div></div>
-  </div>
-</section>
-
-<!-- COMPARISON -->
-<section class="cmp-section">
-  <div class="container">
-    <h2 class="s-title rv" data-ru="Почему выбирают <span class='blue'>ULTIMA?</span>" data-en="Why choose <span class='blue'>ULTIMA?</span>">Почему выбирают <span class="blue">ULTIMA?</span></h2>
-    <div class="cmp-table rv">
-      <div class="cmp-head"><div class="cmp-hc">Ultima</div><div class="cmp-hc" data-ru="Другие" data-en="Others">Другие</div></div>
-      <div class="cmp-row"><div class="cmp-cell"><span class="ok">✓</span><span data-ru="Помогаем найти нишу и раскрыть индивидуальность" data-en="Help find your niche and reveal individuality">Помогаем найти нишу и раскрыть индивидуальность</span></div><div class="cmp-cell"><span class="nx">✕</span><span data-ru="Только популярные типажи" data-en="Only popular types">Только популярные типажи</span></div></div>
-      <div class="cmp-row"><div class="cmp-cell"><span class="ok">✓</span><span data-ru="Развиваем с нуля, создаём фан-базу" data-en="Develop from scratch, build fan base">Развиваем с нуля, создаём фан-базу</span></div><div class="cmp-cell"><span class="nx">✕</span><span data-ru="Только модели с аудиторией" data-en="Only models with audience">Только модели с аудиторией</span></div></div>
-      <div class="cmp-row"><div class="cmp-cell"><span class="ok">✓</span><span data-ru="Долгосрочное сотрудничество" data-en="Long-term cooperation">Долгосрочное сотрудничество</span></div><div class="cmp-cell"><span class="nx">✕</span><span data-ru="Кратковременный взлёт" data-en="Short-term boost">Кратковременный взлёт</span></div></div>
-      <div class="cmp-row"><div class="cmp-cell"><span class="ok">✓</span><span data-ru="Без скрытых платежей" data-en="No hidden fees">Без скрытых платежей</span></div><div class="cmp-cell"><span class="nx">✕</span><span data-ru="Доп. оплата услуг" data-en="Additional service fees">Доп. оплата услуг</span></div></div>
-      <div class="cmp-row"><div class="cmp-cell"><span class="ok">✓</span><span data-ru="Персональный подход" data-en="Personal approach">Персональный подход</span></div><div class="cmp-cell"><span class="nx">✕</span><span data-ru="Шаблонные решения" data-en="Template solutions">Шаблонные решения</span></div></div>
-    </div>
-    <div style="text-align:center;margin-top:20px" class="rv">
-      <button class="btn-blue" onclick="doApply()"><span data-ru="Стать частью ТОП-команды" data-en="Join the TOP team">Стать частью ТОП-команды</span></button>
-    </div>
-  </div>
-</section>
-
-<!-- RESULTS -->
-<section class="res-section">
-  <div class="container">
-    <h2 class="s-title rv" data-ru="Работаем на <span class='blue'>результат</span>" data-en="We work for <span class='blue'>results</span>">Работаем на <span class="blue">результат</span></h2>
-    <p class="s-sub rv" data-ru="Гарантируем при соблюдении рекомендаций:" data-en="We guarantee if you follow our recommendations:">Гарантируем при соблюдении рекомендаций:</p>
-    <div class="res-item rv"><span class="res-dot">●</span><span data-ru="Первые продажи в течение 2 недель" data-en="First sales within 2 weeks">Первые продажи в течение 2 недель</span></div>
-    <div class="res-item rv"><span class="res-dot">●</span><span data-ru="Стабильный доход к концу 1-го месяца" data-en="Stable income by end of 1st month">Стабильный доход к концу 1-го месяца</span></div>
-    <div class="res-item rv"><span class="res-dot">●</span><span data-ru="Выплаты строго по графику" data-en="Payments strictly on schedule">Выплаты строго по графику</span></div>
-    <div class="res-item rv"><span class="res-dot">●</span><span data-ru="Выплата модели до 50%. Без скрытых комиссий." data-en="Model payout up to 50%. No hidden fees.">Выплата модели до 50%. Без скрытых комиссий.</span></div>
-    <div style="margin-top:20px" class="rv">
-      <button class="btn-blue" onclick="doApply()"><span data-ru="Получить гарантии письменно" data-en="Get guarantees in writing">Получить гарантии письменно</span></button>
-    </div>
-  </div>
-</section>
-
-<!-- PLAN -->
-<section class="plan-section">
-  <div class="container">
-    <h2 class="s-title rv" data-ru="Оптимальный <span class='blue'>план</span>" data-en="Optimal <span class='blue'>plan</span>">Оптимальный <span class="blue">план</span></h2>
-    <div class="plan-card rv">
-      <div class="plan-img"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=75&fit=crop&crop=top" alt="" loading="lazy"></div>
-      <div class="plan-left">
-        <h3 data-ru="«Полное продвижение» — <span class='blue'>для максимального роста доходов</span>" data-en="«Full Promotion» — <span class='blue'>for maximum income growth</span>">«Полное продвижение» — <span class="blue">для максимального роста доходов</span></h3>
-        <p data-ru="Полное ведение аккаунта и максимальная монетизация. Чаттинг, маркетинг и аналитика. Без доплат и скрытых комиссий." data-en="Full account management and maximum monetization. Chatting, marketing and analytics. No extra fees.">Полное ведение аккаунта и максимальная монетизация. Чаттинг, маркетинг и аналитика. Без доплат и скрытых комиссий.</p>
-        <ul class="plan-list">
-          <li><span class="plan-dot">●</span><span data-ru="Ведение Instagram/TikTok" data-en="Instagram/TikTok management">Ведение Instagram/TikTok</span></li>
-          <li><span class="plan-dot">●</span><span data-ru="Личный ассистент" data-en="Personal assistant">Личный ассистент</span></li>
-          <li><span class="plan-dot">●</span><span data-ru="Индивидуальные фотосессии" data-en="Individual photo shoots">Индивидуальные фотосессии</span></li>
-        </ul>
-        <button class="btn-blue" onclick="doApply()"><span data-ru="Начать работу" data-en="Get started">Начать работу</span></button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq-section">
-  <div class="container">
-    <h2 class="s-title rv" data-ru="Частые <span class='blue'>вопросы</span>" data-en="Frequently asked <span class='blue'>questions</span>">Частые <span class="blue">вопросы</span></h2>
-    <div class="faq-list">
-      <div class="faq-item rv"><div class="fq"><span data-ru="Какие требования к оборудованию?" data-en="What equipment do I need?">Какие требования к оборудованию?</span><div class="ftog">▾</div></div><div class="fa"><div class="fai" data-ru="Для старта нужен только телефон (желательно iPhone). Рекомендуем кольцевую лампу — стоит недорого." data-en="You only need a phone to start (preferably iPhone). We recommend a ring light — it's inexpensive.">Для старта нужен только телефон (желательно iPhone). Рекомендуем кольцевую лампу — стоит недорого.</div></div></div>
-      <div class="faq-item rv"><div class="fq"><span data-ru="Помогаете ли новичкам?" data-en="Do you help beginners?">Помогаете ли новичкам?</span><div class="ftog">▾</div></div><div class="fa"><div class="fai" data-ru="Да! Полностью запускаем аккаунт с нуля: регистрация, обучение, задания, сопровождение на всех этапах." data-en="Yes! We launch accounts from scratch: registration, training, tasks, support at all stages.">Да! Полностью запускаем аккаунт с нуля: регистрация, обучение, задания, сопровождение на всех этапах.</div></div></div>
-      <div class="faq-item rv"><div class="fq"><span data-ru="Как защищается приватность?" data-en="How is privacy protected?">Как защищается приватность?</span><div class="ftog">▾</div></div><div class="fa"><div class="fai" data-ru="Геоблоки, доступ только по подписке с картой. Русскоязычные пользователи не увидят контент." data-en="Geo-blocks, access only via card subscription. Russian-speaking users won't see your content.">Геоблоки, доступ только по подписке с картой. Русскоязычные пользователи не увидят контент.</div></div></div>
-      <div class="faq-item rv"><div class="fq"><span data-ru="Какой доход реально получить?" data-en="What income is realistic?">Какой доход реально получить?</span><div class="ftog">▾</div></div><div class="fa"><div class="fai" data-ru="В первый месяц $1 000 — $7 000. Топ-модели значительно больше." data-en="First month $1,000 — $7,000. Top models earn significantly more.">В первый месяц $1 000 — $7 000. Топ-модели значительно больше.</div></div></div>
-      <div class="faq-item rv"><div class="fq"><span data-ru="Сколько времени на контент?" data-en="How much time for content?">Сколько времени на контент?</span><div class="ftog">▾</div></div><div class="fa"><div class="fai" data-ru="В среднем — 15-30 часов в неделю." data-en="On average — 15-30 hours per week.">В среднем — 15-30 часов в неделю.</div></div></div>
-      <div class="faq-item rv"><div class="fq"><span data-ru="Нужен ли английский?" data-en="Is English required?">Нужен ли английский?</span><div class="ftog">▾</div></div><div class="fa"><div class="fai" data-ru="Нет. У нас есть профессиональные секстеры для переписки." data-en="No. We have professional sexters for messaging.">Нет. У нас есть профессиональные секстеры для переписки.</div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- SOCIAL -->
-<section class="soc-section">
-  <div class="container">
-    <h2 class="s-title rv" data-ru="Наши <span class='blue'>соцсети</span>" data-en="Our <span class='blue'>socials</span>">Наши <span class="blue">соцсети</span></h2>
-    <div class="soc-grid">
-      <div class="soc-card rv"><div class="soc-thumb"><img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&q=70&fit=crop" alt="" loading="lazy"></div><div class="soc-handle"><div class="sico tt"><svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.78 1.53V6.84a4.84 4.84 0 0 1-1.02-.15z"/></svg></div>@titokchannel</div></div>
-      <div class="soc-card rv"><div class="soc-thumb"><img src="https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?w=400&q=70&fit=crop" alt="" loading="lazy"></div><div class="soc-handle"><div class="sico ig"><svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></div>@instagramchannel</div></div>
-      <div class="soc-card rv"><div class="soc-thumb"><img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400&q=70&fit=crop" alt="" loading="lazy"></div><div class="soc-handle"><div class="sico tg"><svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>@ultima_agency</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<section style="padding:48px 0;background:var(--gray)">
-  <div class="container">
-    <div class="cta-block">
-      <div class="cta-inner">
-        <h2 data-ru="Готова стать следующей ТОП-моделью?" data-en="Ready to become the next TOP model?">Готова стать следующей ТОП-моделью?</h2>
-        <p data-ru="Отправь анкету, и наш HR свяжется с тобой. Полная конфиденциальность гарантирована." data-en="Send your application and our HR will contact you. Full confidentiality guaranteed.">Отправь анкету, и наш HR свяжется с тобой. Полная конфиденциальность гарантирована.</p>
-        <div class="cta-list">
-          <div class="cta-item" data-ru="● Имя" data-en="● Name">● Имя</div>
-          <div class="cta-item" data-ru="● Желаемый доход" data-en="● Desired income">● Желаемый доход</div>
-          <div class="cta-item" data-ru="● Есть ли аккаунт OF" data-en="● Do you have OF account">● Есть ли аккаунт OF</div>
-          <div class="cta-item" data-ru="● Цели" data-en="● Goals">● Цели</div>
-        </div>
-        <div class="cta-guarantees">
-          <div class="cta-g"><span class="cta-g-ico">📣</span><span data-ru="100% конфиденциально" data-en="100% confidential">100% конфиденциально</span></div>
-          <div class="cta-g"><span class="cta-g-ico">🔒</span><span data-ru="Данные не передаются" data-en="Data is not shared">Данные не передаются</span></div>
-          <div class="cta-g"><span class="cta-g-ico">⚡</span><span data-ru="Быстрый ответ" data-en="Fast response">Быстрый ответ</span></div>
-        </div>
-        <button class="cta-btn" onclick="doApply()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--blue)"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      <div style="animation:fadeUp .9s .32s ease both">
+        <button class="hero-btn" onclick="tgApply('hero_cta')">
+          <div class="tg-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
           <span data-ru="Начать зарабатывать больше" data-en="Start earning more">Начать зарабатывать больше</span>
         </button>
       </div>
     </div>
   </div>
+</div>
+
+<!-- PLATFORMS TICKER -->
+<div class="platforms">
+  <div style="overflow:hidden">
+    <div class="plat-track">
+      <span class="plat-item of">OnlyFans</span><span class="plat-item rd">Reddit</span><span class="plat-item ph">PornHub</span><span class="plat-item yt">YouTube</span><span class="plat-item tt">TikTok</span><span class="plat-item of">Instagram</span><span class="plat-item rd">Telegram</span><span class="plat-item of">OnlyFans</span><span class="plat-item rd">Reddit</span><span class="plat-item ph">PornHub</span><span class="plat-item yt">YouTube</span><span class="plat-item tt">TikTok</span><span class="plat-item of">Instagram</span><span class="plat-item rd">Telegram</span>
+    </div>
+  </div>
+</div>
+
+<!-- COUNTER STRIP -->
+<div class="counter-strip" id="counters">
+  <div class="container">
+    <div class="counter-strip-inner">
+      <div class="counter-item rv"><span class="counter-num" id="modelCounter" data-target="0">0</span><div class="counter-lbl" data-ru="Успешных моделей" data-en="Successful models">Успешных моделей</div></div>
+      <div class="counter-item rv"><span class="counter-num" data-target="50" data-suffix="%">0%</span><div class="counter-lbl" data-ru="Выплата модели" data-en="Model payout">Выплата модели</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CALCULATOR -->
+<section id="calculator" class="calc-section">
+  <div class="container">
+    <h2 class="calc-title rv"><span data-ru="Калькулятор" data-en="Calculator">Калькулятор</span> <span style="color:var(--blue)" data-ru="потенциального дохода" data-en="of potential income">потенциального дохода</span></h2>
+    <p class="calc-sub rv" data-ru="Рассчитай, сколько будешь зарабатывать с профессиональным управлением аккаунтом" data-en="Calculate how much you'll earn with professional account management">Рассчитай, сколько будешь зарабатывать с профессиональным управлением аккаунтом</p>
+    <div class="calc-box rv">
+      <div class="calc-grid">
+        <div class="calc-field">
+          <label data-ru="Текущий доход с Fansly ($)" data-en="Current Fansly income ($)">Текущий доход с Fansly ($)</label>
+          <input type="number" class="cinput" id="c-income" value="500" min="0" inputmode="numeric">
+        </div>
+        <div class="calc-field">
+          <label data-ru="Сколько планируешь сотрудничать?" data-en="How long do you plan to work with us?">Сколько планируешь сотрудничать?</label>
+          <div class="slider-row"><span data-ru="2 Мес." data-en="2 Mo.">2 Мес.</span><span data-ru="24 Мес." data-en="24 Mo.">24 Мес.</span></div>
+          <input type="range" class="cslider" id="c-months" min="2" max="24" value="10">
+          <div class="slval" id="c-months-val">10 мес.</div>
+        </div>
+        <div class="calc-field">
+          <label data-ru="Уровень английского" data-en="English level">Уровень английского</label>
+          <div class="eng-btns">
+            <button class="eng-btn active" data-eng="1">A1</button>
+            <button class="eng-btn" data-eng="1.25">A2</button>
+            <button class="eng-btn" data-eng="1.55">B1</button>
+            <button class="eng-btn" data-eng="1.85">B2</button>
+            <button class="eng-btn" data-eng="2.3">C1</button>
+          </div>
+        </div>
+        <div class="calc-field">
+          <label data-ru="Контент в неделю" data-en="Content per week">Контент в неделю</label>
+          <div class="slider-row"><span>10</span><span>250</span></div>
+          <input type="range" class="cslider" id="c-content" min="10" max="250" value="80">
+          <div class="slval" id="c-content-val">80 фото/нед</div>
+        </div>
+        <div class="calc-field">
+          <label data-ru="Опыт в Fansly/OnlyFans" data-en="Fansly/OnlyFans experience">Опыт в Fansly/OnlyFans</label>
+          <div class="slider-row"><span data-ru="0 Мес." data-en="0 Mo.">0 Мес.</span><span data-ru="24 Мес." data-en="24 Mo.">24 Мес.</span></div>
+          <input type="range" class="cslider" id="c-exp" min="0" max="24" value="4">
+          <div class="slval" id="c-exp-val">4 мес. опыта</div>
+        </div>
+        <div class="calc-field">
+          <label data-ru="Продвижение в соцсетях" data-en="Social media promotion">Продвижение в соцсетях</label>
+          <select class="cinput" id="c-reddit">
+            <option value="1" data-ru="Выберите соцсети" data-en="Choose social media">Выберите соцсети</option>
+            <option value="1.3">Reddit</option>
+            <option value="1.2">Instagram</option>
+            <option value="1.1">TikTok</option>
+            <option value="1.4">Reddit + Instagram</option>
+            <option value="1.5" data-ru="Все платформы" data-en="All platforms">Все платформы</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-result-row">
+        <div class="calc-result-label" data-ru="Заработок через 6 месяцев с ULTIMA" data-en="Earnings in 6 months with ULTIMA">Заработок через 6 месяцев с ULTIMA</div>
+        <div class="calc-result-amount" id="c-result">3 925 $</div>
+      </div>
+      <p class="calc-note" data-ru="* Расчёт ориентировочный и зависит от ниши и активности" data-en="* Calculation is approximate, depends on niche and activity">* Расчёт ориентировочный и зависит от ниши и активности</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMS -->
+<section id="problems" class="prob-section">
+  <div class="container">
+    <div class="prob-left">
+      <h2 class="rv" data-ru="Типичные проблемы моделей и <span>контент-креаторов</span>" data-en="Typical problems of models and <span>content creators</span>">Типичные проблемы моделей и <span>контент-креаторов</span></h2>
+      <p class="rv" data-ru="Большинство авторов контента сталкиваются с одними и теми же трудностями: низкий охват, сложности с привлечением подписчиков, нехватка времени на чаттинг и продвижение." data-en="Most content creators face the same challenges: low reach, difficulty attracting subscribers, lack of time for chatting and promotion.">Большинство авторов контента сталкиваются с одними и теми же трудностями: низкий охват, сложности с привлечением подписчиков, нехватка времени на чаттинг и продвижение.</p>
+      <div class="prob-list">
+        <div class="prob-item rv"><div class="prob-ico">&#10007;</div><div class="prob-text" data-ru="Непонятно, с чего начать" data-en="Don't know where to start">Непонятно, с чего начать</div></div>
+        <div class="prob-item rv"><div class="prob-ico">&#10007;</div><div class="prob-text" data-ru="Нет стабильного потока подписчиков" data-en="No steady subscriber flow">Нет стабильного потока подписчиков</div></div>
+        <div class="prob-item rv"><div class="prob-ico">&#10007;</div><div class="prob-text" data-ru="Низкие доходы от PPV" data-en="Low PPV revenue">Низкие доходы от PPV</div></div>
+        <div class="prob-item rv"><div class="prob-ico">&#10007;</div><div class="prob-text" data-ru="Нет времени на чаттинг" data-en="No time for chatting">Нет времени на чаттинг</div></div>
+        <div class="prob-item rv"><div class="prob-ico">&#10007;</div><div class="prob-text" data-ru="Неэффективное продвижение" data-en="Ineffective promotion">Неэффективное продвижение</div></div>
+      </div>
+    </div>
+    <div class="prob-img rv"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=75&fit=crop" alt="" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="srv-section">
+  <div class="container">
+    <div class="srv-intro">
+      <h2 class="rv" data-ru="Что мы <span>предлагаем?</span>" data-en="What we <span>offer?</span>">Что мы <span>предлагаем?</span></h2>
+      <p class="rv" data-ru="ULTIMA Agency предоставляет полный спектр услуг профессионального управления аккаунтом. Команда работает в разных часовых поясах, обеспечивая круглосуточную поддержку." data-en="ULTIMA Agency provides a full range of professional account management. Our team works across time zones, ensuring 24/7 support.">ULTIMA Agency предоставляет полный спектр услуг профессионального управления аккаунтом. Команда работает в разных часовых поясах, обеспечивая круглосуточную поддержку.</p>
+    </div>
+    <div class="srv-grid">
+      <div class="srv-card rv"><div class="srv-ico">&#127760;</div><h3 data-ru="Полное сопровождение креаторов" data-en="Full creator support">Полное сопровождение креаторов</h3><p data-ru="Работаем с моделями из любой страны. За каждой — менеджер, чаттеры, ассистент и траффер." data-en="We work with models from any country. Each gets a manager, chatters, assistant and traffic specialist.">Работаем с моделями из любой страны. За каждой — менеджер, чаттеры, ассистент и траффер.</p></div>
+      <div class="srv-card rv"><div class="srv-ico">&#128227;</div><h3 data-ru="Маркетинг" data-en="Marketing">Маркетинг</h3><p data-ru="Instagram, TikTok, Reddit, YouTube, PornHub — реклама, кросс-продвижение, целевой трафик. Лучшие SEO-стратегии." data-en="Instagram, TikTok, Reddit, YouTube, PornHub — ads, cross-promotion, targeted traffic. Best SEO strategies.">Instagram, TikTok, Reddit, YouTube, PornHub — реклама, кросс-продвижение, целевой трафик. Лучшие SEO-стратегии.</p></div>
+      <div class="srv-card rv"><div class="srv-ico">&#127916;</div><h3 data-ru="Производство контента" data-en="Content production">Производство контента</h3><p data-ru="Фото, видео, обработка, сценарии, монтаж. Агентство берёт на себя редактирование и загрузку." data-en="Photos, videos, editing, scripts. Agency handles editing and uploading.">Фото, видео, обработка, сценарии, монтаж. Агентство берёт на себя редактирование и загрузку.</p></div>
+      <div class="srv-card rv"><div class="srv-ico">&#128172;</div><h3 data-ru="24/7 профессиональный чаттинг" data-en="24/7 professional chatting">24/7 профессиональный чаттинг</h3><p data-ru="Команда экспертов для вовлечения и монетизации фанатов" data-en="Expert team for engaging and monetizing fans">Команда экспертов для вовлечения и монетизации фанатов</p></div>
+      <div class="srv-card rv"><div class="srv-ico">&#128187;</div><h3 data-ru="Управление аккаунтом 24/7" data-en="24/7 account management">Управление аккаунтом 24/7</h3><p data-ru="Планирование публикаций, оформление и редактирование контента" data-en="Scheduling publications, formatting and editing content">Планирование публикаций, оформление и редактирование контента</p></div>
+      <div class="srv-card srv-cta-card rv" onclick="tgApply('choose_package')" style="cursor:pointer"><div class="srv-ico">&#10024;</div><h3 data-ru="Выбрать подходящий пакет" data-en="Choose the right package">Выбрать подходящий пакет</h3><p data-ru="Подберём решение под ваши цели прямо сейчас" data-en="We'll find the solution for your goals right now">Подберём решение под ваши цели прямо сейчас</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="proc-section">
+  <div class="container">
+    <div class="proc-left">
+      <h2 class="rv" data-ru="Прозрачный процесс <span class='blue'>ДО ТОП-ДОХОДОВ</span>" data-en="Transparent process <span class='blue'>TO TOP EARNINGS</span>">Прозрачный процесс <span class="blue">ДО ТОП-ДОХОДОВ</span></h2>
+      <p class="rv" data-ru="Чёткая система из 5 компонентов. Каждый шаг направлен на максимальный результат. Полная прозрачность и ежедневная отчётность:" data-en="Clear 5-component system. Each step designed for maximum results. Full transparency and daily reporting:">Чёткая система из 5 компонентов. Каждый шаг направлен на максимальный результат. Полная прозрачность и ежедневная отчётность:</p>
+      <div class="proc-steps">
+        <div class="proc-step active-step rv" onclick="setStep(this)"><div class="proc-num active">1</div><div class="proc-step-text" data-ru="Разработка персонального бренда, определение ниши" data-en="Personal brand development, niche identification">Разработка персонального бренда, определение ниши</div></div>
+        <div class="proc-step rv" onclick="setStep(this)"><div class="proc-num inactive">2</div><div class="proc-step-text" data-ru="Построение стратегии продвижения" data-en="Building a promotion strategy">Построение стратегии продвижения</div></div>
+        <div class="proc-step rv" onclick="setStep(this)"><div class="proc-num inactive">3</div><div class="proc-step-text" data-ru="Подбор команды специалистов" data-en="Assembling a team of specialists">Подбор команды специалистов</div></div>
+        <div class="proc-step rv" onclick="setStep(this)"><div class="proc-num inactive">4</div><div class="proc-step-text" data-ru="Обучение созданию популярного контента" data-en="Training in creating popular content">Обучение созданию популярного контента</div></div>
+        <div class="proc-step rv" onclick="setStep(this)"><div class="proc-num inactive">5</div><div class="proc-step-text" data-ru="Активное ведение — постинг, чаттинг, трафик" data-en="Active management — posting, chatting, traffic">Активное ведение — постинг, чаттинг, трафик</div></div>
+      </div>
+    </div>
+    <div class="proc-phone rv">
+      <div class="proc-phone-glow"></div>
+      <div class="proc-phone-img"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&q=75&fit=crop" alt="" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="comparison" class="cmp-section">
+  <div class="container">
+    <h2 class="rv" data-ru="Почему выбирают <span class='blue'>ULTIMA?</span>" data-en="Why choose <span class='blue'>ULTIMA?</span>">Почему выбирают <span class="blue">ULTIMA?</span></h2>
+    <p class="cmp-sub rv" data-ru="Фокус на долгосрочном сотрудничестве и стабильно высоком доходе." data-en="Focus on long-term partnerships and consistently high income.">Фокус на долгосрочном сотрудничестве и стабильно высоком доходе.</p>
+    <div class="cmp-table rv">
+      <div class="cmp-head"><div class="cmp-hc">Ultima</div><div class="cmp-hc" data-ru="Другие" data-en="Others">Другие</div></div>
+      <div class="cmp-row"><div class="cmp-cell"><span class="ok">&#10003;</span><span data-ru="Помогаем найти нишу и раскрыть индивидуальность" data-en="Help find your niche and reveal individuality">Помогаем найти нишу и раскрыть индивидуальность</span></div><div class="cmp-cell"><span class="nx">&#10007;</span><span data-ru="Только популярные типажи" data-en="Only popular types">Только популярные типажи</span></div></div>
+      <div class="cmp-row"><div class="cmp-cell"><span class="ok">&#10003;</span><span data-ru="Развиваем с нуля до топа" data-en="Develop from scratch to top">Развиваем с нуля до топа</span></div><div class="cmp-cell"><span class="nx">&#10007;</span><span data-ru="Только с готовой аудиторией" data-en="Only existing audience">Только с готовой аудиторией</span></div></div>
+      <div class="cmp-row"><div class="cmp-cell"><span class="ok">&#10003;</span><span data-ru="Постоянный рост, долгосрочно" data-en="Constant growth, long-term">Постоянный рост, долгосрочно</span></div><div class="cmp-cell"><span class="nx">&#10007;</span><span data-ru="Краткий взлёт, потом падение" data-en="Short boost, then decline">Краткий взлёт, потом падение</span></div></div>
+      <div class="cmp-row"><div class="cmp-cell"><span class="ok">&#10003;</span><span data-ru="Прозрачно, без скрытых платежей" data-en="Transparent, no hidden payments">Прозрачно, без скрытых платежей</span></div><div class="cmp-cell"><span class="nx">&#10007;</span><span data-ru="Скрытые комиссии" data-en="Hidden fees">Скрытые комиссии</span></div></div>
+      <div class="cmp-row"><div class="cmp-cell"><span class="ok">&#10003;</span><span data-ru="Персональный подход" data-en="Personal approach">Персональный подход</span></div><div class="cmp-cell"><span class="nx">&#10007;</span><span data-ru="Шаблонные решения" data-en="Template solutions">Шаблонные решения</span></div></div>
+      <div class="cmp-row"><div class="cmp-cell"><span class="ok">&#10003;</span><span data-ru="Комплекс услуг + личный менеджер" data-en="Full services + personal manager">Комплекс услуг + личный менеджер</span></div><div class="cmp-cell"><span class="nx">&#10007;</span><span data-ru="Точечные услуги без команды" data-en="Selective, no team">Точечные услуги без команды</span></div></div>
+      <div class="cmp-row"><div class="cmp-cell"><span class="ok">&#10003;</span><span data-ru="Реальный офис в СПб" data-en="Real office in St. Petersburg">Реальный офис в СПб</span></div><div class="cmp-cell"><span class="nx">&#10007;</span><span data-ru="Виртуальные, без офиса" data-en="Virtual, no office">Виртуальные, без офиса</span></div></div>
+      <div class="cmp-footer">
+        <div class="cmp-footer-text">
+          <p data-ru="Лучшие условия на рынке. Всё прозрачно, работаем на результат." data-en="Best terms on the market. Everything transparent, we work for results.">Лучшие условия на рынке. Всё прозрачно, работаем на результат.</p>
+          <ul>
+            <li data-ru="Индивидуальная работа" data-en="Individual approach">Индивидуальная работа</li>
+            <li data-ru="Прозрачная статистика" data-en="Transparent statistics">Прозрачная статистика</li>
+            <li data-ru="Менеджер всегда на связи" data-en="Manager always available">Менеджер всегда на связи</li>
+          </ul>
+        </div>
+        <button class="btn-blue" onclick="tgApply('join_top')" data-ru="Стать частью ТОП-команды" data-en="Join the TOP team">Стать частью ТОП-команды</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section id="results" class="res-section">
+  <div class="container">
+    <div class="res-left">
+      <h2 class="rv" data-ru="Работаем на <span class='blue'>результат</span>" data-en="We work for <span class='blue'>results</span>">Работаем на <span class="blue">результат</span></h2>
+      <p class="rv" data-ru="Соблюдай рекомендации по контенту и графику — гарантируем:" data-en="Follow our content and schedule recommendations — we guarantee:">Соблюдай рекомендации по контенту и графику — гарантируем:</p>
+      <div class="res-list">
+        <div class="res-item rv"><span class="res-dot">&#9679;</span><span data-ru="Первые продажи в течение 2 недель" data-en="First sales within 2 weeks">Первые продажи в течение 2 недель</span></div>
+        <div class="res-item rv"><span class="res-dot">&#9679;</span><span data-ru="Стабильный доход к концу 1-го месяца" data-en="Stable income by end of 1st month">Стабильный доход к концу 1-го месяца</span></div>
+        <div class="res-item rv"><span class="res-dot">&#9679;</span><span data-ru="Выплаты строго по графику" data-en="Payments strictly on schedule">Выплаты строго по графику</span></div>
+        <div class="res-item rv"><span class="res-dot">&#9679;</span><span data-ru="Выплата до 50%. Без скрытых комиссий." data-en="Payout up to 50%. No hidden fees.">Выплата до 50%. Без скрытых комиссий.</span></div>
+      </div>
+      <button class="btn-blue rv" onclick="tgApply('guarantees')" data-ru="Получить гарантии письменно" data-en="Get guarantees in writing">Получить гарантии письменно</button>
+    </div>
+    <div class="res-img rv"><img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&q=75&fit=crop" alt="" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section id="plan" class="plan-section">
+  <div class="container">
+    <h2 class="rv" data-ru="Оптимальный <span class='blue'>план сотрудничества</span>" data-en="Optimal <span class='blue'>partnership plan</span>">Оптимальный <span class="blue">план сотрудничества</span></h2>
+    <div class="plan-card rv">
+      <div class="plan-left">
+        <h3 data-ru="«Полное продвижение» — <span class='blue'>максимальный рост доходов</span>" data-en="«Full promotion» — <span class='blue'>maximum income growth</span>">«Полное продвижение» — <span class="blue">максимальный рост доходов</span></h3>
+        <p data-ru="Полное ведение аккаунта и монетизация. Чаттинг, маркетинг и аналитика. Через 2 месяца подключаем соцсети и фотосъёмки." data-en="Full account management and monetization. Chatting, marketing and analytics. After 2 months, social media and photoshoots.">Полное ведение аккаунта и монетизация. Чаттинг, маркетинг и аналитика. Через 2 месяца подключаем соцсети и фотосъёмки.</p>
+        <p data-ru="Без доплат и скрытых комиссий:" data-en="No extra charges or hidden fees:">Без доплат и скрытых комиссий:</p>
+        <ul class="plan-list">
+          <li><span class="plan-dot">&#9679;</span><span data-ru="Ведение Instagram/TikTok" data-en="Instagram/TikTok management">Ведение Instagram/TikTok</span></li>
+          <li><span class="plan-dot">&#9679;</span><span data-ru="Личный ассистент" data-en="Personal assistant">Личный ассистент</span></li>
+          <li><span class="plan-dot">&#9679;</span><span data-ru="Фотосессии — по договорённости" data-en="Photoshoots — by arrangement">Фотосессии — по договорённости</span></li>
+        </ul>
+        <button class="btn-blue" onclick="tgApply('start_work')" data-ru="Начать работу" data-en="Get started">Начать работу</button>
+      </div>
+      <div class="plan-img"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=75&fit=crop&crop=top" alt="" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq-section">
+  <div class="container">
+    <h2 class="rv" data-ru="Ответы на вопросы <span class='blue'>о сотрудничестве</span>" data-en="Questions <span class='blue'>about partnership</span>">Ответы на вопросы <span class="blue">о сотрудничестве</span></h2>
+    <p class="faq-sub rv" data-ru="Частые вопросы от моделей. Не нашла ответ — напиши нашему HR-менеджеру." data-en="Common questions from models. Didn't find your answer — message our HR manager.">Частые вопросы от моделей. Не нашла ответ — напиши нашему HR-менеджеру.</p>
+    <div class="faq-list">
+      <div class="faq-item rv"><div class="fq"><span data-ru="Какие требования к оборудованию?" data-en="Equipment requirements?">Какие требования к оборудованию?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="Для старта нужен только телефон, желательно iPhone. Рекомендуем также кольцевую лампу." data-en="To start, you only need a phone, preferably iPhone. We also recommend a ring light.">Для старта нужен только телефон, желательно iPhone. Рекомендуем также кольцевую лампу.</div></div></div>
+      <div class="faq-item rv"><div class="fq"><span data-ru="Помогаете ли новичкам?" data-en="Do you help beginners?">Помогаете ли новичкам?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="Да! Полностью запускаем аккаунт с нуля: регистрация, обучение, задания, сопровождение на всех этапах." data-en="Yes! We fully launch accounts from scratch: registration, training, assignments, support at all stages.">Да! Полностью запускаем аккаунт с нуля: регистрация, обучение, задания, сопровождение на всех этапах.</div></div></div>
+      <div class="faq-item rv"><div class="fq"><span data-ru="С какими типами моделей работаете?" data-en="What model types do you work with?">С какими типами моделей работаете?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="Важнее харизма и ответственность. Рассматриваем все типажи индивидуально." data-en="Charisma and responsibility matter most. We consider all types individually.">Важнее харизма и ответственность. Рассматриваем все типажи индивидуально.</div></div></div>
+      <div class="faq-item rv"><div class="fq"><span data-ru="Как защищается приватность?" data-en="How is privacy protected?">Как защищается приватность?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="Геоблоки, доступ только подписчикам с картой. Русскоязычные пользователи не получат доступ." data-en="Geo-blocks, access only for subscribers with a card. Russian-speaking users won't have access.">Геоблоки, доступ только подписчикам с картой. Русскоязычные пользователи не получат доступ.</div></div></div>
+      <div class="faq-item rv"><div class="fq"><span data-ru="Какой доход реально получить?" data-en="What income is realistic?">Какой доход реально получить?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="В первый месяц $1000-$7000. Топ-модели — значительно больше." data-en="First month $1,000-$7,000. Top models — significantly more.">В первый месяц $1000-$7000. Топ-модели — значительно больше.</div></div></div>
+      <div class="faq-item rv"><div class="fq"><span data-ru="Нужно ли разбираться в маркетинге?" data-en="Do I need marketing knowledge?">Нужно ли разбираться в маркетинге?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="Нет — мы берём это на себя. Твоя задача — только контент." data-en="No — we handle that. Your task is only content.">Нет — мы берём это на себя. Твоя задача — только контент.</div></div></div>
+      <div class="faq-item rv"><div class="fq"><span data-ru="Сколько времени на контент?" data-en="How much time for content?">Сколько времени на контент?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="15-30 часов в неделю. Топ-модели снимают больше." data-en="15-30 hours per week. Top models shoot more.">15-30 часов в неделю. Топ-модели снимают больше.</div></div></div>
+      <div class="faq-item rv"><div class="fq"><span data-ru="Как быстро первые результаты?" data-en="How fast to see results?">Как быстро первые результаты?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="Результаты видны в первый месяц. Первая выплата — через 2 недели." data-en="Results visible in the first month. First payment within 2 weeks.">Результаты видны в первый месяц. Первая выплата — через 2 недели.</div></div></div>
+      <div class="faq-item rv"><div class="fq"><span data-ru="Какой возраст моделей?" data-en="Model age range?">Какой возраст моделей?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="18-35 лет, можем рассмотреть и старше. Младше 18 — категорически нет." data-en="18-35, may consider older. Under 18 — absolutely not.">18-35 лет, можем рассмотреть и старше. Младше 18 — категорически нет.</div></div></div>
+      <div class="faq-item rv"><div class="fq"><span data-ru="Нужен ли английский?" data-en="Is English required?">Нужен ли английский?</span><div class="ftog">&#9662;</div></div><div class="fa"><div class="fai" data-ru="Нет, в команде есть секстеры для переписки. Занимайся только съёмками." data-en="No, our team has sexters for correspondence. Focus only on shooting.">Нет, в команде есть секстеры для переписки. Занимайся только съёмками.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section id="social" class="soc-section">
+  <div class="container">
+    <h2 class="rv" data-ru="Больше <span class='blue'>о жизни агентства</span>" data-en="More <span class='blue'>about agency life</span>">Больше <span class="blue">о жизни агентства</span></h2>
+    <p class="soc-sub rv" data-ru="Узнаешь из наших социальных сетей" data-en="Find out from our social media">Узнаешь из наших социальных сетей</p>
+    <div class="soc-grid">
+      <div class="soc-card rv"><div class="soc-thumb"><img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=250&q=70&fit=crop" alt="" loading="lazy"></div><div class="soc-handle"><div class="sico-tt"><svg width="10" height="10" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.78 1.53V6.84a4.84 4.84 0 0 1-1.02-.15z"/></svg></div>@titokchannel</div></div>
+      <div class="soc-card rv"><div class="soc-thumb"><img src="https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?w=250&q=70&fit=crop" alt="" loading="lazy"></div><div class="soc-handle"><div class="sico-ig"><svg width="10" height="10" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></div>@instagramchannel</div></div>
+      <div class="soc-card rv"><div class="soc-thumb"><img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?w=250&q=70&fit=crop" alt="" loading="lazy"></div><div class="soc-handle"><div class="sico-tg"><svg width="10" height="10" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>@ultima_agency</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section id="cta-section" style="padding:48px 0;background:var(--gray)">
+  <div class="container">
+    <div class="cta-block">
+      <div class="cta-left">
+        <h2 data-ru="Готова стать ТОП-моделью Fansly/OnlyFans?" data-en="Ready to become a TOP Fansly/OnlyFans model?">Готова стать ТОП-моделью Fansly/OnlyFans?</h2>
+        <p data-ru="Отправь анкету — HR-менеджер свяжется с тобой. Конфиденциальность гарантирована:" data-en="Send your application — HR manager will contact you. Confidentiality guaranteed:">Отправь анкету — HR-менеджер свяжется с тобой. Конфиденциальность гарантирована:</p>
+        <div class="cta-list">
+          <div class="cta-item"><span data-ru="&#9679; Имя" data-en="&#9679; Name">&#9679; Имя</span></div>
+          <div class="cta-item"><span data-ru="&#9679; Желаемый доход" data-en="&#9679; Desired income">&#9679; Желаемый доход</span></div>
+          <div class="cta-item"><span data-ru="&#9679; Есть ли аккаунт" data-en="&#9679; Have an account">&#9679; Есть ли аккаунт</span></div>
+          <div class="cta-item"><span data-ru="&#9679; Цели" data-en="&#9679; Goals">&#9679; Цели</span></div>
+        </div>
+        <p class="cta-note" data-ru="Начни путь к финансовой независимости!" data-en="Start your path to financial independence!">Начни путь к финансовой независимости!</p>
+        <div class="cta-guarantees">
+          <div class="cta-g"><span class="cta-g-ico">&#128227;</span><span data-ru="100% конфиденциально" data-en="100% confidential">100% конфиденциально</span></div>
+          <div class="cta-g"><span class="cta-g-ico">&#128274;</span><span data-ru="Данные не передаются третьим лицам" data-en="Data not shared with third parties">Данные не передаются третьим лицам</span></div>
+          <div class="cta-g"><span class="cta-g-ico">&#9889;</span><span data-ru="Быстрый ответ" data-en="Quick response">Быстрый ответ</span></div>
+        </div>
+        <button class="cta-btn" onclick="tgApply('main_cta')" data-ru="&#9992; Начать зарабатывать больше" data-en="&#9992; Start earning more">&#9992; Начать зарабатывать больше</button>
+      </div>
+      <div class="cta-right"><img src="https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=600&q=75&fit=crop&crop=top" alt="" loading="lazy"></div>
+    </div>
+  </div>
 </section>
 
 <!-- VACANCIES -->
-<section class="vac-section">
+<section id="vacancies" class="vac-section">
   <div class="container">
-    <h2 class="s-title rv" data-ru="Вакансии <span class='blue'>ULTIMA</span>" data-en="Vacancies at <span class='blue'>ULTIMA</span>">Вакансии <span class="blue">ULTIMA</span></h2>
-    <p class="s-sub rv" data-ru="Выбери работу по душе" data-en="Choose a job you love">Выбери работу по душе</p>
+    <h2 class="rv" data-ru="Вакансии <span class='blue'>ULTIMA</span>" data-en="Vacancies at <span class='blue'>ULTIMA</span>">Вакансии <span class="blue">ULTIMA</span></h2>
+    <p class="vac-sub rv" data-ru="Мы ищем талантов — выбери работу по душе." data-en="We're looking for talent — choose a job you love.">Мы ищем талантов — выбери работу по душе.</p>
     <div class="vac-list">
-      <div class="vac-card rv" onclick="navigateTo('scout')"><h3 data-ru="Модельный скаут" data-en="Model Scout">Модельный скаут</h3><p data-ru="Оплата: сдельная — за каждую модель. От 20 000 ₽" data-en="Payment: per model. From 20,000 RUB">Оплата: сдельная — за каждую модель. От 20 000 ₽</p><span class="vac-link" data-ru="Подробнее ›" data-en="Learn more ›">Подробнее ›</span></div>
-      <div class="vac-card rv" onclick="navigateTo('sexter')"><h3 data-ru="Секстер" data-en="Sexter">Секстер</h3><p data-ru="График: 5 дней на выбор. Оплата: 80 000 – 400 000 ₽" data-en="Schedule: 5 days of choice. Pay: 80,000 – 400,000 RUB">График: 5 дней на выбор. Оплата: 80 000 – 400 000 ₽</p><span class="vac-link" data-ru="Подробнее ›" data-en="Learn more ›">Подробнее ›</span></div>
-      <div class="vac-card rv" onclick="navigateTo('model')"><h3 data-ru="OnlyFans-модель (девушка)" data-en="OnlyFans model (female)">OnlyFans-модель (девушка)</h3><p data-ru="Возраст: 18-35 лет. Оплата: 80 000 – 400 000 ₽" data-en="Age: 18-35. Pay: 80,000 – 400,000 RUB">Возраст: 18-35 лет. Оплата: 80 000 – 400 000 ₽</p><span class="vac-link" data-ru="Подробнее ›" data-en="Learn more ›">Подробнее ›</span></div>
+      <!-- SEXTER -->
+      <div class="vac-card rv" id="vac-sexter">
+        <h3 data-ru="Секстер" data-en="Sexter">Секстер</h3>
+        <div class="vac-salary-badge">80 000 – 400 000 &#8381;/<span data-ru="мес" data-en="mo">мес</span></div>
+        <div class="vac-tags-mini">
+          <span class="vac-tag-mini" data-ru="5 дней на выбор" data-en="5 days of choice">5 дней на выбор</span>
+          <span class="vac-tag-mini" data-ru="В студии" data-en="In studio">В студии</span>
+          <span class="vac-tag-mini" data-ru="Еженедельно" data-en="Weekly pay">Еженедельно</span>
+        </div>
+        <p data-ru="5 рабочих дней на выбор, 2 выходных" data-en="5 working days of choice, 2 days off">5 рабочих дней на выбор, 2 выходных</p>
+        <button class="vac-link" onclick="toggleVac(this)" data-ru="Подробнее &#8250;" data-en="Details &#8250;">Подробнее &#8250;</button>
+        <div class="vac-expand">
+          <div class="vac-detail"><h4 data-ru="&#128176; Оплата" data-en="&#128176; Pay">&#128176; Оплата</h4><ul>
+            <li data-ru="20% от тотала (до $1 000/нед)" data-en="20% of total (up to $1,000/wk)">20% от тотала (до $1 000/нед)</li>
+            <li data-ru="25% от тотала ($1 000+/нед)" data-en="25% of total ($1,000+/wk)">25% от тотала ($1 000+/нед)</li>
+            <li data-ru="Выплаты: еженедельно" data-en="Payments: weekly">Выплаты: еженедельно</li>
+          </ul></div>
+          <div class="vac-detail"><h4 data-ru="&#9989; Требования" data-en="&#9989; Requirements">&#9989; Требования</h4><ul>
+            <li data-ru="Английский от B1 (языковой тест)" data-en="English B1+ (language test)">Английский от B1 (языковой тест)</li>
+            <li data-ru="Ответственность и пунктуальность" data-en="Responsibility and punctuality">Ответственность и пунктуальность</li>
+            <li data-ru="Готовность к 5 сменам в неделю" data-en="Ready for 5 shifts/week">Готовность к 5 сменам в неделю</li>
+            <li data-ru="Опыт приветствуется, но не обязателен" data-en="Experience welcome, not required">Опыт приветствуется, но не обязателен</li>
+          </ul></div>
+          <div class="vac-detail"><h4 data-ru="&#127891; Мы предлагаем" data-en="&#127891; We offer">&#127891; Мы предлагаем</h4><ul>
+            <li data-ru="Обучение и куратор на всех этапах" data-en="Training and curator at all stages">Обучение и куратор на всех этапах</li>
+          </ul></div>
+          <button class="btn-blue" style="margin-top:12px" onclick="tgApply('vacancy_sexter')" data-ru="&#9992; Откликнуться" data-en="&#9992; Apply">&#9992; Откликнуться</button>
+        </div>
+      </div>
+      <!-- MODEL -->
+      <div class="vac-card rv" id="vac-model">
+        <h3 data-ru="OnlyFans-модель (девушка)" data-en="OnlyFans model (female)">OnlyFans-модель (девушка)</h3>
+        <div class="vac-salary-badge">80 000 – 400 000 &#8381;/<span data-ru="мес" data-en="mo">мес</span></div>
+        <div class="vac-tags-mini">
+          <span class="vac-tag-mini" data-ru="18-35 лет" data-en="18-35 y.o.">18-35 лет</span>
+          <span class="vac-tag-mini" data-ru="Гибкий график" data-en="Flexible">Гибкий график</span>
+          <span class="vac-tag-mini" data-ru="В студии" data-en="Studio">В студии</span>
+        </div>
+        <p data-ru="Гибкий график, работа в студии, еженедельные выплаты" data-en="Flexible schedule, studio work, weekly payments">Гибкий график, работа в студии, еженедельные выплаты</p>
+        <button class="vac-link" onclick="toggleVac(this)" data-ru="Подробнее &#8250;" data-en="Details &#8250;">Подробнее &#8250;</button>
+        <div class="vac-expand">
+          <div class="vac-detail"><h4 data-ru="&#128176; Оплата" data-en="&#128176; Pay">&#128176; Оплата</h4><ul>
+            <li data-ru="50% от тотала, еженедельно" data-en="50% of total, weekly">50% от тотала, еженедельно</li>
+          </ul></div>
+          <div class="vac-detail"><h4 data-ru="&#9989; Требования" data-en="&#9989; Requirements">&#9989; Требования</h4><ul>
+            <li data-ru="Только девушки" data-en="Women only">Только девушки</li>
+            <li data-ru="Английский не требуется" data-en="English not required">Английский не требуется</li>
+            <li data-ru="Опыт не нужен" data-en="No experience needed">Опыт не нужен</li>
+            <li data-ru="Хороший смартфон (iPhone)" data-en="Good smartphone (iPhone)">Хороший смартфон (iPhone)</li>
+            <li data-ru="Условия для съёмки контента" data-en="Conditions for content creation">Условия для съёмки контента</li>
+          </ul></div>
+          <div class="vac-detail"><h4 data-ru="&#128221; Обязанности" data-en="&#128221; Duties">&#128221; Обязанности</h4><ul>
+            <li data-ru="Контент по референсам" data-en="Content by references">Контент по референсам</li>
+            <li data-ru="Задания куратора" data-en="Curator assignments">Задания куратора</li>
+          </ul></div>
+          <div class="vac-detail"><h4 data-ru="&#11088; Приветствуется" data-en="&#11088; Desired">&#11088; Приветствуется</h4><ul>
+            <li data-ru="Харизма, ухоженность, умение в кадре" data-en="Charisma, grooming, camera presence">Харизма, ухоженность, умение в кадре</li>
+            <li data-ru="Типажи: азиатка, бэби фейс, альт, косплей, милф" data-en="Types: Asian, baby face, alt, cosplay, MILF">Типажи: азиатка, бэби фейс, альт, косплей, милф</li>
+          </ul></div>
+          <button class="btn-blue" style="margin-top:12px" onclick="tgApply('vacancy_model')" data-ru="&#9992; Откликнуться" data-en="&#9992; Apply">&#9992; Откликнуться</button>
+        </div>
+      </div>
+      <!-- SCOUT -->
+      <div class="vac-card rv" id="vac-scout">
+        <h3 data-ru="Модельный скаут" data-en="Model Scout">Модельный скаут</h3>
+        <div class="vac-salary-badge">20 000 – 400 000 &#8381;/<span data-ru="мес" data-en="mo">мес</span></div>
+        <div class="vac-tags-mini">
+          <span class="vac-tag-mini" data-ru="Гибкий график" data-en="Flexible">Гибкий график</span>
+          <span class="vac-tag-mini" data-ru="Удалённо" data-en="Remote">Удалённо</span>
+          <span class="vac-tag-mini" data-ru="Еженедельно" data-en="Weekly pay">Еженедельно</span>
+        </div>
+        <p data-ru="Сдельная оплата за каждую приведённую модель" data-en="Per-model pay for each recruited model">Сдельная оплата за каждую приведённую модель</p>
+        <button class="vac-link" onclick="toggleVac(this)" data-ru="Подробнее &#8250;" data-en="Details &#8250;">Подробнее &#8250;</button>
+        <div class="vac-expand">
+          <div class="vac-detail"><h4 data-ru="&#128176; Оплата" data-en="&#128176; Pay">&#128176; Оплата</h4><ul>
+            <li data-ru="20 000 &#8381; за рекрут + бонус при $1 000" data-en="20,000 RUB per recruit + bonus at $1,000">20 000 &#8381; за рекрут + бонус при $1 000</li>
+            <li data-ru="Выплаты: еженедельно" data-en="Payments: weekly">Выплаты: еженедельно</li>
+            <li data-ru="Больше моделей = выше доход" data-en="More models = higher income">Больше моделей = выше доход</li>
+          </ul></div>
+          <div class="vac-detail"><h4 data-ru="&#9989; Требования" data-en="&#9989; Requirements">&#9989; Требования</h4><ul>
+            <li data-ru="Английский не требуется" data-en="English not required">Английский не требуется</li>
+            <li data-ru="Опыт не нужен" data-en="No experience needed">Опыт не нужен</li>
+            <li data-ru="Умение находить и привлекать девушек" data-en="Ability to find and attract girls">Умение находить и привлекать девушек</li>
+          </ul></div>
+          <div class="vac-detail"><h4 data-ru="&#128269; Критерии" data-en="&#128269; Criteria">&#128269; Критерии</h4><ul>
+            <li data-ru="Возраст моделей: 18-35" data-en="Model age: 18-35">Возраст моделей: 18-35</li>
+            <li data-ru="Предпочтение: без опыта OF" data-en="Preference: no OF experience">Предпочтение: без опыта OF</li>
+            <li data-ru="Готовность начать с нуля" data-en="Ready to start from scratch">Готовность начать с нуля</li>
+          </ul></div>
+          <button class="btn-blue" style="margin-top:12px" onclick="tgApply('vacancy_scout')" data-ru="&#9992; Откликнуться" data-en="&#9992; Apply">&#9992; Откликнуться</button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<div class="footer">
-  <div class="f-logo"><div class="nav-dot"></div>ULTIMA</div>
-  <p class="f-desc" data-ru="ULTIMA Agency — помогаем контент-креаторам достигать финансовой независимости" data-en="ULTIMA Agency — helping content creators achieve financial independence">ULTIMA Agency — помогаем контент-креаторам достигать финансовой независимости</p>
-  <div class="f-soc">
-    <div class="f-soc-btn tt"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.78 1.53V6.84a4.84 4.84 0 0 1-1.02-.15z"/></svg></div>
-    <div class="f-soc-btn tg"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
-    <div class="f-soc-btn ig"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></div>
-  </div>
-  <div class="f-copy">©2026 ULTIMA Agency. OnlyFans & Fansly</div>
-</div>
-
-</div><!-- /page-main -->
-
-<!-- ═══════════════ VACANCY: SEXTER ═══════════════ -->
-<div class="page" id="page-sexter">
-  <div class="vac-hero">
-    <div class="vac-back" onclick="navigateTo('main')">← <span data-ru="Назад" data-en="Back">Назад</span></div>
-    <div class="vac-badge" data-ru="Открытая вакансия" data-en="Open position">Открытая вакансия</div>
-    <h1 data-ru="Секстер" data-en="Sexter">Секстер</h1>
-    <div class="vac-salary"><div class="vac-salary-num">80 000 – 400 000 ₽</div><div class="vac-salary-lbl" data-ru="в месяц, на руки" data-en="per month, net">в месяц, на руки</div></div>
-    <div class="vac-tags">
-      <span class="vac-tag" data-ru="5 дней на выбор" data-en="5 days of choice">5 дней на выбор</span>
-      <span class="vac-tag" data-ru="В студии" data-en="In studio">В студии</span>
-      <span class="vac-tag" data-ru="Еженедельно" data-en="Weekly pay">Еженедельно</span>
+<div class="mini-footer">
+  <div class="container">
+    <div class="flogo"><div class="nav-dot"></div>ULTIMA</div>
+    <p class="flogo-desc" data-ru="ULTIMA Agency — помогаем креаторам достигать финансовой независимости." data-en="ULTIMA Agency — helping creators achieve financial independence.">ULTIMA Agency — помогаем креаторам достигать финансовой независимости.</p>
+    <div class="fsoc-row">
+      <div class="fsoc-btn tt"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.78 1.53V6.84a4.84 4.84 0 0 1-1.02-.15z"/></svg></div>
+      <div class="fsoc-btn tg"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
+      <div class="fsoc-btn ig"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></div>
     </div>
+    <div class="fbottom" data-ru="&copy;2026 ULTIMA Agency. OnlyFans &amp; Fansly" data-en="&copy;2026 ULTIMA Agency. OnlyFans &amp; Fansly">&copy;2026 ULTIMA Agency. OnlyFans &amp; Fansly</div>
   </div>
-  <div class="vac-content">
-    <div class="vac-block"><h3><div class="vac-block-ico">💰</div><span data-ru="Оплата" data-en="Payment">Оплата</span></h3><ul>
-      <li data-ru="20% от тотала (до $1 000/нед)" data-en="20% of total (up to $1,000/week)">20% от тотала (до $1 000/нед)</li>
-      <li data-ru="25% от тотала ($1 000+/нед)" data-en="25% of total ($1,000+/week)">25% от тотала ($1 000+/нед)</li>
-      <li data-ru="Выплаты еженедельно" data-en="Weekly payouts">Выплаты еженедельно</li>
-    </ul></div>
-    <div class="vac-block"><h3><div class="vac-block-ico">📋</div><span data-ru="Требования" data-en="Requirements">Требования</span></h3><ul>
-      <li data-ru="Английский: от B1" data-en="English: B1 minimum">Английский: от B1</li>
-      <li data-ru="Языковой тест" data-en="Language test required">Языковой тест</li>
-      <li data-ru="Ответственность и пунктуальность" data-en="Responsibility and punctuality">Ответственность и пунктуальность</li>
-      <li data-ru="Готовность работать 5 смен/нед" data-en="Ready to work 5 shifts/week">Готовность работать 5 смен/нед</li>
-      <li data-ru="Опыт приветствуется, но не обязателен" data-en="Experience welcome but not required">Опыт приветствуется, но не обязателен</li>
-    </ul></div>
-    <div class="vac-block"><h3><div class="vac-block-ico">🎓</div><span data-ru="Мы предоставляем" data-en="We provide">Мы предоставляем</span></h3><ul>
-      <li data-ru="Обучение и куратор на всех этапах" data-en="Training and curator support at all stages">Обучение и куратор на всех этапах</li>
-    </ul></div>
-  </div>
-  <div class="vac-cta"><button class="vac-cta-btn" onclick="doApply('sexter')"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg><span data-ru="Откликнуться" data-en="Apply">Откликнуться</span></button></div>
 </div>
 
-<!-- ═══════════════ VACANCY: MODEL ═══════════════ -->
-<div class="page" id="page-model">
-  <div class="vac-hero">
-    <div class="vac-back" onclick="navigateTo('main')">← <span data-ru="Назад" data-en="Back">Назад</span></div>
-    <div class="vac-badge" data-ru="Открытая вакансия" data-en="Open position">Открытая вакансия</div>
-    <h1 data-ru="OnlyFans-модель" data-en="OnlyFans Model">OnlyFans-модель</h1>
-    <div class="vac-salary"><div class="vac-salary-num">80 000 – 400 000 ₽</div><div class="vac-salary-lbl" data-ru="в месяц, на руки" data-en="per month, net">в месяц, на руки</div></div>
-    <div class="vac-tags">
-      <span class="vac-tag" data-ru="Гибкий график" data-en="Flexible schedule">Гибкий график</span>
-      <span class="vac-tag" data-ru="18-35 лет" data-en="18-35 years">18-35 лет</span>
-      <span class="vac-tag" data-ru="50% от тотала" data-en="50% of total">50% от тотала</span>
-    </div>
-  </div>
-  <div class="vac-content">
-    <div class="vac-block"><h3><div class="vac-block-ico">💰</div><span data-ru="Оплата" data-en="Payment">Оплата</span></h3><ul>
-      <li data-ru="50% от тотала" data-en="50% of total">50% от тотала</li>
-      <li data-ru="Выплаты еженедельно" data-en="Weekly payouts">Выплаты еженедельно</li>
-    </ul></div>
-    <div class="vac-block"><h3><div class="vac-block-ico">📋</div><span data-ru="Требования" data-en="Requirements">Требования</span></h3><ul>
-      <li data-ru="Только девушки" data-en="Females only">Только девушки</li>
-      <li data-ru="Английский не нужен" data-en="No English required">Английский не нужен</li>
-      <li data-ru="Опыт не нужен" data-en="No experience needed">Опыт не нужен</li>
-      <li data-ru="Хороший смартфон (iPhone)" data-en="Good smartphone (iPhone)">Хороший смартфон (iPhone)</li>
-      <li data-ru="Условия для съёмки контента" data-en="Conditions for content shooting">Условия для съёмки контента</li>
-    </ul></div>
-    <div class="vac-block"><h3><div class="vac-block-ico">📝</div><span data-ru="Обязанности" data-en="Responsibilities">Обязанности</span></h3><ul>
-      <li data-ru="Контент по референсам" data-en="Content based on references">Контент по референсам</li>
-      <li data-ru="Задания куратора" data-en="Curator's tasks">Задания куратора</li>
-    </ul></div>
-    <div class="vac-block"><h3><div class="vac-block-ico">✨</div><span data-ru="Приветствуется" data-en="Welcome">Приветствуется</span></h3><ul>
-      <li data-ru="Ухоженность, харизма" data-en="Grooming, charisma">Ухоженность, харизма</li>
-      <li data-ru="Типажи: азиатка, бэби фейс, альт-гёрл, косплей, милф" data-en="Types: Asian, baby face, alt-girl, cosplay, MILF">Типажи: азиатка, бэби фейс, альт-гёрл, косплей, милф</li>
-    </ul></div>
-  </div>
-  <div class="vac-cta"><button class="vac-cta-btn" onclick="doApply('model')"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg><span data-ru="Откликнуться" data-en="Apply">Откликнуться</span></button></div>
-</div>
-
-<!-- ═══════════════ VACANCY: SCOUT ═══════════════ -->
-<div class="page" id="page-scout">
-  <div class="vac-hero">
-    <div class="vac-back" onclick="navigateTo('main')">← <span data-ru="Назад" data-en="Back">Назад</span></div>
-    <div class="vac-badge" data-ru="Открытая вакансия" data-en="Open position">Открытая вакансия</div>
-    <h1 data-ru="Модельный скаут" data-en="Model Scout">Модельный скаут</h1>
-    <div class="vac-salary"><div class="vac-salary-num">20 000 – 400 000 ₽</div><div class="vac-salary-lbl" data-ru="в месяц, на руки" data-en="per month, net">в месяц, на руки</div></div>
-    <div class="vac-tags">
-      <span class="vac-tag" data-ru="Гибкий график" data-en="Flexible schedule">Гибкий график</span>
-      <span class="vac-tag" data-ru="Удалённо" data-en="Remote">Удалённо</span>
-      <span class="vac-tag" data-ru="Еженедельно" data-en="Weekly pay">Еженедельно</span>
-    </div>
-  </div>
-  <div class="vac-content">
-    <div class="vac-block"><h3><div class="vac-block-ico">💰</div><span data-ru="Оплата" data-en="Payment">Оплата</span></h3><ul>
-      <li data-ru="Сдельная — за каждую модель" data-en="Per-model commission">Сдельная — за каждую модель</li>
-      <li data-ru="20 000 ₽ за рекрут" data-en="20,000 RUB per recruit">20 000 ₽ за рекрут</li>
-      <li data-ru="Доп. бонус при закрытии на $1 000" data-en="Extra bonus at $1,000 close">Доп. бонус при закрытии на $1 000</li>
-      <li data-ru="Выплаты еженедельно" data-en="Weekly payouts">Выплаты еженедельно</li>
-    </ul></div>
-    <div class="vac-block"><h3><div class="vac-block-ico">📋</div><span data-ru="Требования" data-en="Requirements">Требования</span></h3><ul>
-      <li data-ru="Английский не нужен" data-en="No English required">Английский не нужен</li>
-      <li data-ru="Опыт не нужен" data-en="No experience needed">Опыт не нужен</li>
-      <li data-ru="Умение находить и привлекать моделей" data-en="Ability to find and attract models">Умение находить и привлекать моделей</li>
-    </ul></div>
-    <div class="vac-block"><h3><div class="vac-block-ico">🎯</div><span data-ru="Критерии моделей" data-en="Model criteria">Критерии моделей</span></h3><ul>
-      <li data-ru="Возраст: 18-35 лет" data-en="Age: 18-35 years">Возраст: 18-35 лет</li>
-      <li data-ru="Без опыта на Fansly/OnlyFans" data-en="No Fansly/OnlyFans experience">Без опыта на Fansly/OnlyFans</li>
-      <li data-ru="Готовность начать с нуля" data-en="Ready to start from scratch">Готовность начать с нуля</li>
-    </ul></div>
-  </div>
-  <div class="vac-cta"><button class="vac-cta-btn" onclick="doApply('scout')"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0h-.056zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg><span data-ru="Откликнуться" data-en="Apply">Откликнуться</span></button></div>
-</div>
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bnav-item active" data-target="hero" onclick="navTo('hero',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+    <span data-ru="Главная" data-en="Home">Главная</span>
+  </button>
+  <button class="bnav-item" data-target="services" onclick="navTo('services',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+    <span data-ru="Услуги" data-en="Services">Услуги</span>
+  </button>
+  <button class="bnav-item" data-target="calculator" onclick="navTo('calculator',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+    <span data-ru="Расчёт" data-en="Calc">Расчёт</span>
+  </button>
+  <button class="bnav-item" data-target="faq" onclick="navTo('faq',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <span>FAQ</span>
+  </button>
+  <button class="bnav-item" data-target="vacancies" onclick="navTo('vacancies',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+    <span data-ru="Вакансии" data-en="Jobs">Вакансии</span>
+  </button>
+</nav>
 
 <script>
-// ── Telegram Web App ──
-const tg = window.Telegram && window.Telegram.WebApp;
-if (tg) { tg.ready(); tg.expand(); }
-
-// ── Navigation ──
-let currentPage = 'main';
-function navigateTo(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const target = page === 'main' ? 'page-main' : 'page-' + page;
-  document.getElementById(target).classList.add('active');
-  window.scrollTo(0, 0);
-  currentPage = page;
-  if (tg) {
-    if (page === 'main') { tg.BackButton.hide(); }
-    else { tg.BackButton.show(); }
-  }
-}
-if (tg) { tg.BackButton.onClick(() => navigateTo('main')); }
-
-// ── Apply action ──
-function doApply(vacancy) {
-  const data = vacancy ? {action:'apply', vacancy} : {action:'apply'};
-  if (tg && tg.sendData) {
-    try { tg.sendData(JSON.stringify(data)); } catch(e) { window.open('https://t.me/botown_testbot','_blank'); }
-  } else {
-    window.open('https://t.me/botown_testbot','_blank');
+// -- Telegram WebApp Init --
+var tg = window.Telegram && window.Telegram.WebApp;
+if (tg) {
+  tg.ready();
+  tg.expand();
+  if (tg.themeParams) {
+    var tp = tg.themeParams;
+    var root = document.documentElement;
+    if (tp.bg_color) document.body.style.background = tp.bg_color;
+    if (tp.text_color) document.body.style.color = tp.text_color;
+    if (tp.secondary_bg_color) root.style.setProperty('--gray', tp.secondary_bg_color);
+    if (tp.hint_color) { root.style.setProperty('--text3', tp.hint_color); root.style.setProperty('--text2', tp.hint_color); }
+    if (tp.button_color) { root.style.setProperty('--blue', tp.button_color); root.style.setProperty('--bg', 'linear-gradient(135deg,' + tp.button_color + ',' + tp.button_color + ')'); }
+    if (tp.bg_color) { document.querySelector('.top-bar').style.background = tp.bg_color + 'ee'; document.querySelector('.bottom-nav').style.background = tp.bg_color + 'f0'; }
   }
 }
 
-// ── Language ──
-let lang = localStorage.getItem('ultima_lang') || 'ru';
-function switchLang(l) {
-  lang = l;
-  localStorage.setItem('ultima_lang', l);
-  document.querySelectorAll('[data-ru]').forEach(el => {
-    const val = el.getAttribute('data-' + l);
-    if (val !== null) el.innerHTML = val;
-  });
-  document.getElementById('langToggle').textContent = l === 'ru' ? 'English' : 'Русский';
+function tgApply(source) {
+  var data = JSON.stringify({ action: 'apply', source: source });
+  if (tg && tg.sendData) { try { tg.sendData(data); } catch(e) { if (tg.close) tg.close(); } }
+  else if (tg && tg.close) { tg.close(); }
 }
-function toggleLang() { switchLang(lang === 'ru' ? 'en' : 'ru'); }
-if (lang !== 'ru') switchLang(lang);
 
-// ── Scroll reveal ──
-const ro = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vs'); });
-}, { threshold: 0.05 });
-document.querySelectorAll('.rv').forEach(el => ro.observe(el));
-
-// ── Counters ──
-const modelEl = document.getElementById('modelCounter');
-const payoutEl = document.getElementById('payoutCounter');
-const modelTarget = Math.floor(Math.random() * 201) + 400;
-function animateCounter(el, target, suffix) {
-  let start = 0; const dur = 1500;
-  const step = ts => {
-    if (!start) start = ts;
-    const p = Math.min((ts - start) / dur, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(ease * target) + (suffix || '');
-    if (p < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
+// -- Language --
+var currentLang = localStorage.getItem('ultima-lang') || 'ru';
+function switchLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('ultima-lang', lang);
+  document.querySelectorAll('[data-ru]').forEach(function(el) { var t = el.getAttribute('data-' + lang); if (t !== null) el.innerHTML = t; });
+  document.querySelectorAll('select option[data-ru]').forEach(function(opt) { var t = opt.getAttribute('data-' + lang); if (t !== null) opt.textContent = t; });
+  var btn = document.getElementById('langToggle');
+  if (btn) btn.textContent = lang === 'ru' ? 'English' : 'Русский';
+  document.documentElement.lang = lang;
+  updateCalcLabels();
 }
-const cObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
+function toggleLang() { switchLang(currentLang === 'ru' ? 'en' : 'ru'); }
+function updateCalcLabels() {
+  var m = parseInt(document.getElementById('c-months').value);
+  var c = parseInt(document.getElementById('c-content').value);
+  var e = parseInt(document.getElementById('c-exp').value);
+  if (currentLang === 'en') { document.getElementById('c-months-val').textContent = m + ' mo.'; document.getElementById('c-content-val').textContent = c + ' photos/wk'; document.getElementById('c-exp-val').textContent = e + ' mo. exp.'; }
+  else { document.getElementById('c-months-val').textContent = m + ' мес.'; document.getElementById('c-content-val').textContent = c + ' фото/нед'; document.getElementById('c-exp-val').textContent = e + ' мес. опыта'; }
+}
+
+// -- Reveal --
+var ro = new IntersectionObserver(function(entries) { entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('vs'); }); }, { threshold: 0.06, rootMargin: '0px 0px -20px 0px' });
+document.querySelectorAll('.rv').forEach(function(el) { ro.observe(el); });
+
+// -- Top bar scroll --
+window.addEventListener('scroll', function() { document.getElementById('topBar').classList.toggle('scrolled', window.scrollY > 30); });
+
+// -- Random model count 400-600 --
+var modelEl = document.getElementById('modelCounter');
+modelEl.dataset.target = Math.floor(Math.random() * 201) + 400;
+
+// -- Counter animation --
+var cObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
     if (e.isIntersecting && !e.target.dataset.done) {
       e.target.dataset.done = '1';
-      if (e.target === modelEl) animateCounter(modelEl, modelTarget, '');
-      if (e.target === payoutEl) animateCounter(payoutEl, 50, '%');
+      var el = e.target, target = +el.dataset.target, suffix = el.dataset.suffix || '', start = 0;
+      var step = function(ts) { if (!start) start = ts; var p = Math.min((ts - start) / 1800, 1); el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target) + suffix; if (p < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
     }
   });
 }, { threshold: 0.5 });
-cObs.observe(modelEl); cObs.observe(payoutEl);
+document.querySelectorAll('.counter-num[data-target]').forEach(function(el) { cObs.observe(el); });
 
-// ── FAQ ──
-document.querySelectorAll('.fq').forEach(q => {
-  q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
-});
+// -- FAQ --
+document.querySelectorAll('.fq').forEach(function(q) { q.addEventListener('click', function() { q.parentElement.classList.toggle('open'); }); });
 
-// ── Calculator ──
-let engVal = 1;
-document.querySelectorAll('.eng-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.eng-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    engVal = +btn.dataset.eng;
-    updateCalc();
-  });
-});
-function updateCalc() {
-  const income = parseFloat(document.getElementById('c-income').value) || 0;
-  const months = parseInt(document.getElementById('c-months').value);
-  const content = parseInt(document.getElementById('c-content').value);
-  document.getElementById('c-months-val').textContent = months;
-  document.getElementById('c-content-val').textContent = content;
-  const cb = 1 + (content - 10) / 240 * 1.2;
-  const mb = 1 + months / 24 * 1.5;
-  const result = Math.round(income * engVal * cb * mb / 100) * 100;
-  const el = document.getElementById('c-result');
-  el.textContent = result.toLocaleString('ru-RU') + ' $';
+// -- Process steps --
+function setStep(step) {
+  document.querySelectorAll('.proc-step').forEach(function(s) { s.classList.remove('active-step'); s.querySelector('.proc-num').className = 'proc-num inactive'; });
+  step.classList.add('active-step'); step.querySelector('.proc-num').className = 'proc-num active';
 }
-['c-income','c-months','c-content'].forEach(id =>
-  document.getElementById(id).addEventListener('input', updateCalc));
+
+// -- Calculator --
+var engVal = 1;
+document.querySelectorAll('.eng-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() { document.querySelectorAll('.eng-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); engVal = +btn.dataset.eng; updateCalc(); });
+});
+function animateResult(el, val) { el.style.transform = 'scale(.92)'; el.style.opacity = '.7'; setTimeout(function() { el.textContent = val.toLocaleString('ru-RU') + ' $'; el.style.transform = 'scale(1)'; el.style.opacity = '1'; }, 150); el.style.transition = 'transform .15s,opacity .15s'; }
+function updateCalc() {
+  var inc = parseFloat(document.getElementById('c-income').value) || 0;
+  var mo = parseInt(document.getElementById('c-months').value), co = parseInt(document.getElementById('c-content').value), ex = parseInt(document.getElementById('c-exp').value), rd = parseFloat(document.getElementById('c-reddit').value);
+  updateCalcLabels();
+  var r = Math.round(inc * engVal * (1 + (co - 10) / 240 * 1.2) * (1 + mo / 24 * 1.5) * (1 + ex / 24 * 0.5) * rd / 100) * 100;
+  animateResult(document.getElementById('c-result'), r);
+}
+['c-income','c-months','c-content','c-exp','c-reddit'].forEach(function(id) { document.getElementById(id).addEventListener('input', updateCalc); });
 updateCalc();
+
+// -- Bottom Nav --
+function navTo(id, btn) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); document.querySelectorAll('.bnav-item').forEach(function(b) { b.classList.remove('active'); }); if (btn) btn.classList.add('active'); }
+var sIds = ['hero','services','calculator','faq','vacancies'];
+var sEls = sIds.map(function(id) { return document.getElementById(id); }).filter(Boolean);
+var nBtns = document.querySelectorAll('.bnav-item');
+window.addEventListener('scroll', function() { var sy = window.scrollY + 120, ai = 0; sEls.forEach(function(s, i) { if (s.offsetTop <= sy) ai = i; }); nBtns.forEach(function(b) { b.classList.remove('active'); }); nBtns[ai].classList.add('active'); }, { passive: true });
+
+// -- Vacancy toggle --
+function toggleVac(btn) { var exp = btn.nextElementSibling, isOpen = exp.classList.contains('open'); document.querySelectorAll('.vac-expand').forEach(function(e) { e.classList.remove('open'); }); document.querySelectorAll('.vac-card').forEach(function(c) { c.style.borderLeftColor = 'transparent'; }); if (!isOpen) { exp.classList.add('open'); btn.closest('.vac-card').style.borderLeftColor = 'var(--blue)'; } }
+
+// -- Smooth scroll --
+document.querySelectorAll('a[href^="#"]').forEach(function(a) { a.addEventListener('click', function(e) { var t = document.querySelector(a.getAttribute('href')); if (t) { e.preventDefault(); t.scrollIntoView({ behavior:'smooth' }); } }); });
+
+// -- Apply saved language --
+if (currentLang !== 'ru') switchLang(currentLang);
 </script>
 </body>
 </html>
