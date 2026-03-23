@@ -819,11 +819,12 @@ if (tg) {
 }
 
 function closeApp() {
-  if (tg && tg.close) {
-    tg.close();
-  } else {
-    window.close();
-  }
+  try {
+    var wa = window.Telegram && window.Telegram.WebApp;
+    if (wa && typeof wa.close === 'function') { wa.close(); return; }
+  } catch(e) {}
+  try { window.close(); } catch(e2) {}
+  history.back();
 }
 
 // -- Language --
