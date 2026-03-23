@@ -819,13 +819,26 @@ if (tg) {
 }
 
 function closeApp() {
+  /* Force reload page first to reset any stale state, then close */
   try {
     var wa = window.Telegram && window.Telegram.WebApp;
-    if (wa && typeof wa.close === 'function') { wa.close(); return; }
+    if (wa && typeof wa.close === 'function') {
+      wa.close();
+    }
   } catch(e) {}
-  try { window.close(); } catch(e2) {}
-  history.back();
+  /* Fallback: navigate to bot directly */
+  setTimeout(function() { window.location.href = 'https://t.me/botown_testbot'; }, 100);
 }
+
+/* Attach via event delegation - catches ALL clicks on buttons */
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[onclick*="closeApp"]');
+  if (btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeApp();
+  }
+}, true);
 
 // -- Language --
 var currentLang = localStorage.getItem('ultima-lang') || 'ru';
