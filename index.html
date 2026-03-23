@@ -10,15 +10,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;color-scheme:light !important}
 body{
   font-family:'Inter',sans-serif;
-  background:#fff !important;
-  color:#1a1a1a !important;
+  background-color:#ffffff !important;
+  color:#1a1a2e !important;
   line-height:1.6;overflow-x:hidden;
   padding-bottom:68px;
   -webkit-font-smoothing:antialiased;
+  -webkit-text-fill-color:#1a1a2e;
 }
+/* Force ALL text visible on light bg */
+h1,h2,h3,h4,h5,h6{color:#1A1A2E !important;-webkit-text-fill-color:#1A1A2E !important}
+p,span,li,td,th,label,div{-webkit-text-fill-color:inherit}
+section{background-color:#fff;color:#1A1A2E !important}
+section[class*="gray"],section[class*="prob"],section[class*="proc"],section[class*="faq"],section[class*="vac"]{background-color:#F5F7FA !important}
 a{text-decoration:none;color:inherit}
 :root{
   --tg-theme-bg-color:#fff !important;
@@ -52,6 +58,36 @@ section{padding:48px 0}
 .cmp-footer-text,.calc-note{color:#4A5568 !important}
 .proc-num.inactive{background:#DDE3EC !important;color:#718096 !important}
 
+/* FORCE WHITE TEXT on dark/blue backgrounds */
+.hero-inner h1,.hero-inner h2,.hero-desc,.hf,
+.counter-num,.counter-lbl,
+.srv-cta-card,.srv-cta-card h3,.srv-cta-card p,.srv-cta-card .srv-ico,
+.cta-left,.cta-left h2,.cta-left p,.cta-note,.cta-item,.cta-g,
+.cmp-hc,.proc-num.active,
+.calc-result-amount,
+.btn-blue,.eng-btn.active,.ftog,
+.tg-ico,.nsb:active,
+.fsoc-btn.tt,.fsoc-btn.tg,.fsoc-btn.ig,
+.vac-cta-btn{
+  color:#fff !important;-webkit-text-fill-color:#fff !important
+}
+/* FORCE DARK TEXT on light backgrounds */
+.top-logo,.lang-btn,.nsb,
+.calc-title,.calc-field label,.cinput,.cinput-lbl,.slval,.eng-btn,
+.prob-left h2,.prob-text,.prob-left p,
+.srv-intro h2,.srv-card h3,.srv-card p,
+.proc-left h2,.proc-left>p,.proc-step-text,
+.cmp-section h2,.cmp-sub,.cmp-cell,.cmp-footer-text,
+.res-left h2,.res-left>p,.res-item,.res-dot,
+.plan-section h2,.plan-left h3,.plan-left p,.plan-list li,.plan-dot,
+.faq-section h2,.faq-sub,.fq span,.fai,
+.soc-section h2,.soc-sub,.soc-handle,
+.vac-section h2,.vac-sub,.vac-card h3,.vac-card>p,.vac-salary,.vac-tags span,
+.tab-label,
+.hero-btn{
+  -webkit-text-fill-color:currentColor !important
+}
+
 /* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -81,7 +117,7 @@ section{padding:48px 0}
 .hero-img{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=75&fit=crop') center top/cover no-repeat}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.55) 50%,rgba(0,0,0,.3) 100%)}
 .hero-inner{position:relative;z-index:1;padding:48px 0 40px}
-.hero-inner h1{font-size:1.65rem;font-weight:900;color:#fff;line-height:1.15;margin-bottom:16px;letter-spacing:-.03em}
+.hero-inner h1{font-size:1.65rem;font-weight:900;color:#fff;-webkit-text-fill-color:#fff;line-height:1.15;margin-bottom:16px;letter-spacing:-.03em}
 .highlight{display:inline-block;background:rgba(255,255,255,.1);border:2px solid rgba(0,170,255,.6);border-radius:12px;padding:3px 14px;color:var(--blue);backdrop-filter:blur(4px)}
 .hero-desc{font-size:.86rem;color:rgba(255,255,255,.82);margin-bottom:20px;line-height:1.7}
 .hero-feats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
