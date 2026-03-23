@@ -13,35 +13,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-/* BLOCK TELEGRAM DARK MODE COMPLETELY */
-:root{color-scheme:light only !important}
-html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;color-scheme:light only !important;background:#fff !important}
-@media(prefers-color-scheme:dark){
-  html,body{background-color:#fff !important;color:#1a1a2e !important}
-}
-body{
-  font-family:'Inter',sans-serif;
-  background-color:#ffffff !important;
-  color:#1a1a2e !important;
-  line-height:1.6;overflow-x:hidden;
-  padding-bottom:68px;
-  -webkit-font-smoothing:antialiased;
-  -webkit-text-fill-color:#1a1a2e;
-}
-/* Force ALL text visible on light bg */
-h1,h2,h3,h4,h5,h6{color:#1A1A2E !important;-webkit-text-fill-color:#1A1A2E !important}
-p,span,li,td,th,label,div{-webkit-text-fill-color:inherit}
-section{background-color:#fff;color:#1A1A2E !important}
-section[class*="gray"],section[class*="prob"],section[class*="proc"],section[class*="faq"],section[class*="vac"]{background-color:#F5F7FA !important}
-a{text-decoration:none;color:inherit}
+/*
+  TELEGRAM DARK MODE FIX
+  Telegram overrides background-color and color but CANNOT override:
+  - background-image (use linear-gradient(X,X) instead of bg-color)
+  - -webkit-text-fill-color (use instead of color)
+  - background-clip:text with -webkit-text-fill-color
+*/
 :root{
-  --tg-theme-bg-color:#fff !important;
-  --tg-theme-text-color:#1a1a1a !important;
-  --tg-theme-secondary-bg-color:#F5F7FA !important;
-  --tg-theme-hint-color:#718096 !important;
-  --tg-theme-link-color:#00AAFF !important;
-  --tg-theme-button-color:#00AAFF !important;
-  --tg-theme-button-text-color:#fff !important;
   --blue:#00AAFF;--blue2:#0077DD;--blue3:#0055BB;
   --bg:linear-gradient(135deg,#00AAFF,#0077DD);
   --gray:#F5F7FA;--gray2:#E8EDF3;--gray3:#DDE3EC;
@@ -51,29 +30,63 @@ a{text-decoration:none;color:inherit}
   --shl:0 12px 40px rgba(0,100,200,.14);
   --shb:0 8px 32px rgba(0,150,255,.35)
 }
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;
+  background-image:linear-gradient(#fff,#fff) !important}
+body{
+  font-family:'Inter',sans-serif;
+  background-image:linear-gradient(#fff,#fff) !important;
+  -webkit-text-fill-color:#1a1a2e !important;
+  line-height:1.6;overflow-x:hidden;
+  padding-bottom:68px;
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;-webkit-text-fill-color:inherit}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#00aaff;border-radius:2px}
 .container{width:100%;padding:0 16px;max-width:480px;margin:0 auto}
 section{padding:48px 0}
-/* FORCE BACKGROUNDS - block Telegram dark mode bg override */
-.calc-section,.srv-section,.cmp-section,.plan-section,.soc-section{background-color:#ffffff !important;color:#1A1A2E !important}
-.prob-section,.proc-section,.faq-section,.vac-section,.res-section{background-color:#F5F7FA !important;color:#1A1A2E !important}
-.top-bar{background-color:rgba(255,255,255,.94) !important}
-.counter-strip{background:linear-gradient(135deg,#00AAFF,#0077DD) !important}
-.calc-box,.srv-card,.cmp-footer{background-color:#F5F7FA !important}
-.prob-item,.faq-item,.vac-card,.calc-result-row,.cinput,.eng-btn{background-color:#ffffff !important}
-.cmp-table,.cmp-row{background-color:#ffffff !important}
-/* Force dark text on white/light sections */
-.calc-section h2,.calc-section h3,.calc-section p,.calc-section label,
-.srv-section h2,.srv-section h3,.srv-section p,
-.cmp-section h2,.cmp-section h3,.cmp-section p,
-.plan-section h2,.plan-section h3,.plan-section p,
-.soc-section h2,.soc-section h3,.soc-section p{color:#1A1A2E !important}
-.calc-sub,.srv-intro p,.cmp-sub,.plan-left p,.soc-sub,
-.srv-card p,.prob-text,.res-item,.fai,.vac-card>p,
-.cmp-footer-text,.calc-note{color:#4A5568 !important}
-.proc-num.inactive{background:#DDE3EC !important;color:#718096 !important}
 
-/* FORCE WHITE TEXT on dark/blue backgrounds */
+/* ===== WHITE BG SECTIONS — use background-image trick ===== */
+.calc-section,.srv-section,.cmp-section,.plan-section,.soc-section,
+section{background-image:linear-gradient(#fff,#fff) !important}
+.prob-section,.proc-section,.faq-section,.vac-section,.res-section{
+  background-image:linear-gradient(#F5F7FA,#F5F7FA) !important}
+.top-bar{background-image:linear-gradient(rgba(255,255,255,.97),rgba(255,255,255,.97)) !important}
+.counter-strip{background-image:linear-gradient(135deg,#00AAFF,#0077DD) !important}
+.calc-box,.srv-card,.cmp-footer{background-image:linear-gradient(#F5F7FA,#F5F7FA) !important}
+.prob-item,.faq-item,.vac-card,.calc-result-row,.cinput,.eng-btn,
+.cmp-table,.cmp-row,.cmp-cell{background-image:linear-gradient(#fff,#fff) !important}
+
+/* ===== DARK TEXT — use -webkit-text-fill-color ===== */
+h1,h2,h3,h4,h5,h6{-webkit-text-fill-color:#1A1A2E !important}
+.top-logo,.lang-btn,.nsb{-webkit-text-fill-color:#1A1A2E !important}
+.calc-title,.calc-field label,.cinput{-webkit-text-fill-color:#1A1A2E !important}
+.prob-left h2,.srv-intro h2,.proc-left h2,.cmp-section h2,
+.res-left h2,.plan-section h2,.plan-left h3,
+.faq-section h2,.soc-section h2,.vac-section h2,
+.vac-card h3,.soc-handle,.fq span{-webkit-text-fill-color:#1A1A2E !important}
+.hero-btn{-webkit-text-fill-color:#1A1A2E !important;background-image:linear-gradient(#fff,#fff) !important}
+
+/* Medium text */
+.calc-sub,.srv-intro p,.cmp-sub,.plan-left p,.soc-sub,
+.srv-card p,.prob-text,.prob-left p,.res-item,.fai,.vac-card>p,
+.cmp-footer-text,.calc-note,.proc-left>p,.res-left>p,
+.faq-sub,.proc-step-text,.cmp-cell,.plan-list li,
+.cinput-lbl,.eng-btn,.tab-label,
+.vac-sub,.vac-salary,.vac-tags span{-webkit-text-fill-color:#4A5568 !important}
+
+/* Light text */
+.proc-num.inactive{background-image:linear-gradient(#DDE3EC,#DDE3EC) !important;-webkit-text-fill-color:#718096 !important}
+.cmp-cell:last-child{-webkit-text-fill-color:#718096 !important}
+.slval{-webkit-text-fill-color:#00AAFF !important}
+.ok{-webkit-text-fill-color:#16C784 !important}
+.nx{-webkit-text-fill-color:#FF4444 !important}
+.res-dot,.plan-dot,.prob-ico{-webkit-text-fill-color:#00AAFF !important}
+.highlight{-webkit-text-fill-color:#00AAFF !important}
+
+/* Active step */
+.proc-step.active-step .proc-step-text{-webkit-text-fill-color:#1A1A2E !important}
+
+/* ===== WHITE TEXT on blue/dark backgrounds ===== */
 .hero-inner h1,.hero-inner h2,.hero-desc,.hf,
 .counter-num,.counter-lbl,
 .srv-cta-card,.srv-cta-card h3,.srv-cta-card p,.srv-cta-card .srv-ico,
@@ -83,25 +96,20 @@ section{padding:48px 0}
 .btn-blue,.eng-btn.active,.ftog,
 .tg-ico,.nsb:active,
 .fsoc-btn.tt,.fsoc-btn.tg,.fsoc-btn.ig,
-.vac-cta-btn{
-  color:#fff !important;-webkit-text-fill-color:#fff !important
+.vac-cta-btn,.plat-item{
+  -webkit-text-fill-color:#fff !important
 }
-/* FORCE DARK TEXT on light backgrounds */
-.top-logo,.lang-btn,.nsb,
-.calc-title,.calc-field label,.cinput,.cinput-lbl,.slval,.eng-btn,
-.prob-left h2,.prob-text,.prob-left p,
-.srv-intro h2,.srv-card h3,.srv-card p,
-.proc-left h2,.proc-left>p,.proc-step-text,
-.cmp-section h2,.cmp-sub,.cmp-cell,.cmp-footer-text,
-.res-left h2,.res-left>p,.res-item,.res-dot,
-.plan-section h2,.plan-left h3,.plan-left p,.plan-list li,.plan-dot,
-.faq-section h2,.faq-sub,.fq span,.fai,
-.soc-section h2,.soc-sub,.soc-handle,
-.vac-section h2,.vac-sub,.vac-card h3,.vac-card>p,.vac-salary,.vac-tags span,
-.tab-label,
-.hero-btn{
-  -webkit-text-fill-color:currentColor !important
-}
+.hf-ico{-webkit-text-fill-color:#fff !important}
+.cta-block{background-image:linear-gradient(135deg,#00AAFF,#0077DD) !important}
+.srv-cta-card{background-image:linear-gradient(135deg,#00AAFF,#0077DD) !important}
+.proc-num.active{background-image:linear-gradient(135deg,#00AAFF,#0077DD) !important}
+.cmp-head{background-image:linear-gradient(135deg,#00AAFF,#0077DD) !important}
+.calc-result-amount{background-image:linear-gradient(135deg,#00AAFF,#0077DD) !important}
+.eng-btn.active{background-image:linear-gradient(#00AAFF,#00AAFF) !important}
+.btn-blue{background-image:linear-gradient(135deg,#00AAFF,#0077DD) !important}
+.ftog{background-image:linear-gradient(135deg,#00AAFF,#0077DD) !important}
+.bottom-nav{background-image:linear-gradient(#fff,#fff) !important}
+.tab-item.active .tab-label{-webkit-text-fill-color:#00AAFF !important}
 
 /* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
