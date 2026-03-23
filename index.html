@@ -819,13 +819,23 @@ if (tg) {
 }
 
 function tgApply(source) {
-  var botUrl = 'https://t.me/botown_testbot';
-  if (tg && tg.openTelegramLink) {
-    tg.openTelegramLink(botUrl);
-  } else {
-    window.open(botUrl, '_blank');
-  }
+  var botUrl = 'https://t.me/botown_testbot?start=' + source;
+  /* Try all possible methods */
+  try { if (tg && tg.openTelegramLink) { tg.openTelegramLink(botUrl); return; } } catch(e1) {}
+  try { if (tg && tg.openLink) { tg.openLink(botUrl); return; } } catch(e2) {}
+  try { window.open(botUrl, '_blank'); return; } catch(e3) {}
+  window.location.href = botUrl;
 }
+/* Also make all CTA buttons work as links as backup */
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('[onclick*="tgApply"]').forEach(function(btn) {
+    btn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      var m = btn.getAttribute('onclick').match(/tgApply\('([^']+)'\)/);
+      if (m) tgApply(m[1]);
+    });
+  });
+});
 
 // -- Language --
 var currentLang = localStorage.getItem('ultima-lang') || 'ru';
