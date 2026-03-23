@@ -819,9 +819,12 @@ if (tg) {
 }
 
 function tgApply(source) {
-  var data = JSON.stringify({ action: 'apply', source: source });
-  if (tg && tg.sendData) { try { tg.sendData(data); } catch(e) { if (tg.close) tg.close(); } }
-  else if (tg && tg.close) { tg.close(); }
+  var botUrl = 'https://t.me/botown_testbot';
+  if (tg && tg.openTelegramLink) {
+    tg.openTelegramLink(botUrl);
+  } else {
+    window.open(botUrl, '_blank');
+  }
 }
 
 // -- Language --
